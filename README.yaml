@@ -17,7 +17,7 @@ license: "APACHE2"
 copyrights:
   - name: "Cloud Posse, LLC"
     url: "https://cloudposse.com"
-    year: "2020"
+    year: "2021"
 
 # Canonical GitHub repo
 github_repo: cloudposse/terraform-example-module
@@ -73,7 +73,7 @@ usage: |-
 
   ```hcl
   module "example" {
-    source = "https://github.com/cloudposse/terraform-example-module.git?ref=master"
+    source  = "cloudposse/terraform-helm-release/aws
     example = "Hello world!"
   }
   ```
@@ -96,3 +96,5 @@ include:
 contributors:
   - name: "Erik Osterman"
     github: "osterman"
+  - name: "RB"
+    github: "nitrocode"
