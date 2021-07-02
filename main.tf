@@ -4,9 +4,8 @@ locals {
 }
 
 module "eks_iam_policy" {
-  source = "git::https://github.com/cloudposse/terraform-aws-iam-policy.git"
-  # source  = "cloudposse/iam-policy/aws"
-  # version = "0.8.0"
+  source  = "cloudposse/iam-policy/aws"
+  version = "0.1.0"
 
   enabled = local.iam_role_enabled
 
@@ -33,7 +32,8 @@ module "eks_iam_role" {
 }
 
 module "helm_release" {
-  source = "git::https://github.com/cloudposse/terraform-helm-release.git"
+  source  = "cloudposse/release/helm"
+  version = "0.1.0"
 
   name          = module.this.name
   description   = var.description
