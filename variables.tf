@@ -50,7 +50,7 @@ variable "service_account_namespace" {
 
 variable "description" {
   type        = string
-  description = "Set release description attribute (visible in the history)."
+  description = "Release description attribute (visible in the history)."
   default     = null
 }
 
@@ -67,19 +67,19 @@ variable "repository" {
 
 variable "repository_key_file" {
   type        = string
-  description = "The repositories cert key file"
+  description = "The repositories cert key file."
   default     = null
 }
 
 variable "repository_cert_file" {
   type        = string
-  description = "The repositories cert file"
+  description = "The repositories cert file."
   default     = null
 }
 
 variable "repository_ca_file" {
   type        = string
-  description = "The Repositories CA File."
+  description = "The Repositories CA file."
   default     = null
 }
 
@@ -121,13 +121,13 @@ variable "verify" {
 
 variable "keyring" {
   type        = string
-  description = "Location of public keys used for verification. Used only if `verify` is true. Defaults to `/.gnupg/pubring.gpg` in the location set by `home`"
+  description = "Location of public keys used for verification. Used only if `verify` is true. Defaults to `/.gnupg/pubring.gpg` in the location set by `home`."
   default     = null
 }
 
 variable "timeout" {
   type        = number
-  description = "Time in seconds to wait for any individual kubernetes operation (like Jobs for hooks). Defaults to `300` seconds"
+  description = "Time in seconds to wait for any individual kubernetes operation (like Jobs for hooks). Defaults to `300` seconds."
   default     = null
 }
 
@@ -157,7 +157,7 @@ variable "force_update" {
 
 variable "recreate_pods" {
   type        = bool
-  description = " Perform pods restart during upgrade/rollback. Defaults to `false`."
+  description = "Perform pods restart during upgrade/rollback. Defaults to `false`."
   default     = null
 }
 
