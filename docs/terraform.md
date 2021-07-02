@@ -13,9 +13,9 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_eks_iam_policy"></a> [eks\_iam\_policy](#module\_eks\_iam\_policy) | git::https://github.com/cloudposse/terraform-aws-iam-policy.git | n/a |
+| <a name="module_eks_iam_policy"></a> [eks\_iam\_policy](#module\_eks\_iam\_policy) | cloudposse/iam-policy/aws | 0.1.0 |
 | <a name="module_eks_iam_role"></a> [eks\_iam\_role](#module\_eks\_iam\_role) | cloudposse/eks-iam-role/aws | 0.8.0 |
-| <a name="module_helm_release"></a> [helm\_release](#module\_helm\_release) | git::https://github.com/cloudposse/terraform-helm-release.git | n/a |
+| <a name="module_helm_release"></a> [helm\_release](#module\_helm\_release) | cloudposse/release/helm | 0.1.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.24.1 |
 
 ## Resources

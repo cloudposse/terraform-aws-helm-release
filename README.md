@@ -100,9 +100,45 @@ For automated tests of the complete example using [bats](https://github.com/bats
 (which tests and deploys the example on AWS), see [test](test).
 
 ```hcl
-module "example" {
-  source  = "cloudposse/terraform-helm-release/aws
-  example = "Hello world!"
+module "aws_helm_release" {
+  source  = "cloudposse/helm-release/aws"
+  # Cloud Posse recommends pinning every module to a specific version
+  # version = "x.x.x"
+
+  repository    = "https://charts.helm.sh/incubator"
+  chart         = "raw"
+  chart_version = "0.2.5"
+
+  kubernetes_namespace = "echo"
+  create_namespace     = true
+
+  atomic          = true
+  cleanup_on_fail = true
+  timeout         = 300
+  wait            = true
+
+  # these values will be deep merged
+  # values = [
+  # ]
+
+  iam_role_enabled = true
+
+  iam_policy_statements = [
+    {
+      sid        = "ListMyBucket"
+      effect     = "Allow"
+      actions    = ["s3:ListBucket"]
+      resources  = ["arn:aws:s3:::test"]
+      conditions = []
+    },
+    {
+      sid        = "WriteMyBucket"
+      effect     = "Allow"
+      actions    = ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"]
+      resources  = ["arn:aws:s3:::test/*"]
+      conditions = []
+    },
+  ]
 }
 ```
 
@@ -143,9 +179,9 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_eks_iam_policy"></a> [eks\_iam\_policy](#module\_eks\_iam\_policy) | git::https://github.com/cloudposse/terraform-aws-iam-policy.git | n/a |
+| <a name="module_eks_iam_policy"></a> [eks\_iam\_policy](#module\_eks\_iam\_policy) | cloudposse/iam-policy/aws | 0.1.0 |
 | <a name="module_eks_iam_role"></a> [eks\_iam\_role](#module\_eks\_iam\_role) | cloudposse/eks-iam-role/aws | 0.8.0 |
-| <a name="module_helm_release"></a> [helm\_release](#module\_helm\_release) | git::https://github.com/cloudposse/terraform-helm-release.git | n/a |
+| <a name="module_helm_release"></a> [helm\_release](#module\_helm\_release) | cloudposse/release/helm | 0.1.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.24.1 |
 
 ## Resources
