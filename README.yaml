@@ -48,17 +48,13 @@ references:
   - name: "Terraform Module Requirements"
     description: "HashiCorp's guidance on all the requirements for publishing a module. Meeting the requirements for publishing a module is extremely easy."
     url: "https://www.terraform.io/docs/registry/modules/publish.html#requirements"
-  - name: "Terraform `random_integer` Resource"
-    description: "The resource random_integer generates random values from a given range, described by the min and max attributes of a given resource."
-    url: "https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer"
   - name: "Terraform Version Pinning"
     description: "The required_version setting can be used to constrain which versions of the Terraform CLI can be used with your configuration"
     url: "https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version"
 
 # Short description of this project
 description: |-
-  This is `terraform-aws-helm-release` project provides all the scaffolding for a typical well-built Cloud Posse module. It's a template repository you can
-  use when creating new repositories.
+  This is `terraform-aws-helm-release` project creates a helm chart with an option to create an EKS IAM role.
 
 # Introduction to the project
 #introduction: |-
@@ -72,17 +68,19 @@ usage: |-
   (which tests and deploys the example on AWS), see [test](test).
 
   ```hcl
-  module "aws_helm_release" {
+  module "helm_release" {
     source  = "cloudposse/helm-release/aws"
     # Cloud Posse recommends pinning every module to a specific version
     # version = "x.x.x"
+
+    name = "echo"
 
     repository    = "https://charts.helm.sh/incubator"
     chart         = "raw"
     chart_version = "0.2.5"
 
-    kubernetes_namespace = "echo"
     create_namespace     = true
+    kubernetes_namespace = "echo"
 
     atomic          = true
     cleanup_on_fail = true

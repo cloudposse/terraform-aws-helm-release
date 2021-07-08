@@ -22,8 +22,8 @@ module "eks_iam_role" {
   enabled = local.iam_role_enabled
 
   aws_account_number          = var.aws_account_number
-  aws_partition               = var.aws_partition
   aws_iam_policy_document     = local.iam_role_enabled ? module.eks_iam_policy.json : "{}"
+  aws_partition               = var.aws_partition
   eks_cluster_oidc_issuer_url = var.eks_cluster_oidc_issuer_url
   service_account_name        = var.service_account_name
   service_account_namespace   = var.service_account_namespace
@@ -31,30 +31,28 @@ module "eks_iam_role" {
   context = module.this.context
 }
 
-module "helm_release" {
-  source  = "cloudposse/release/helm"
-  version = "0.1.0"
+resource "helm_release" "this" {
+  count = local.enabled ? 1 : 0
 
-  name          = module.this.name
-  description   = var.description
+  name = module.this.name
+
   chart         = var.chart
+  description   = var.description
   devel         = var.devel
-  chart_version = var.chart_version
+  version       = var.chart_version
 
   repository           = var.repository
-  repository_key_file  = var.repository_key_file
-  repository_cert_file = var.repository_cert_file
   repository_ca_file   = var.repository_ca_file
-  repository_username  = var.repository_username
+  repository_cert_file = var.repository_cert_file
+  repository_key_file  = var.repository_key_file
   repository_password  = var.repository_password
+  repository_username  = var.repository_username
 
   # Note: creating a namespace here will not allow creation of labels/annotations
   # For that, a `kubernetes_namespace` resource would have to be created.
   # See https://github.com/hashicorp/terraform-provider-helm/issues/584#issuecomment-689555268
   create_namespace = var.create_namespace
   namespace        = var.kubernetes_namespace
-
-  values = var.values
 
   atomic                     = var.atomic
   cleanup_on_fail            = var.cleanup_on_fail
@@ -72,12 +70,34 @@ module "helm_release" {
   reuse_values               = var.reuse_values
   skip_crds                  = var.skip_crds
   timeout                    = var.timeout
+  values                     = var.values
   verify                     = var.verify
   wait                       = var.wait
   wait_for_jobs              = var.wait_for_jobs
-  set                        = var.set
-  set_sensitive              = var.set_sensitive
-  postrender_binary_path     = var.postrender_binary_path
 
-  context = module.this.context
+  dynamic "set" {
+    for_each = var.set
+    content {
+      name  = set.value["name"]
+      value = set.value["value"]
+      type  = set.value["type"]
+    }
+  }
+
+  dynamic "set_sensitive" {
+    for_each = var.set_sensitive
+    content {
+      name  = set_sensitive.value["name"]
+      value = set_sensitive.value["value"]
+      type  = set_sensitive.value["type"]
+    }
+  }
+
+  dynamic "postrender" {
+    for_each = var.postrender_binary_path != null ? [1] : []
+
+    content {
+      binary_path = var.postrender_binary_path
+    }
+  }
 }
