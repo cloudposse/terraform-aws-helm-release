@@ -1,0 +1,39 @@
+image:
+  repository: "amazon/aws-node-termination-handler"
+  tag: "v1.13.1"
+  pullPolicy: IfNotPresent
+
+podMonitor:
+  create: false
+  interval: "30s"
+  sampleLimit: 5000
+
+priorityClassName: system-node-critical
+
+rbac:
+  pspEnabled: true
+
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "50m"
+  limits:
+    memory: "128Mi"
+    cpu: "100m"
+
+securityContext:
+  runAsUserID: 1000
+  runAsGroupID: 1000
+
+serviceAccount:
+  create: true
+  name: "aws-node-termination-handler"
+  annotations: {}
+
+tolerations:
+- operator: Exists
+
+updateStrategy:
+  type: "RollingUpdate"
+  rollingUpdate:
+    maxUnavailable: 1
