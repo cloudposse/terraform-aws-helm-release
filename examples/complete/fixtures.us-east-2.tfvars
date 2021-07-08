@@ -36,20 +36,20 @@ cluster_encryption_config_enabled = true
 
 ## helm related
 
-repository    = "https://charts.helm.sh/incubator"
+repository = "https://charts.helm.sh/incubator"
 
-chart         = "raw"
+chart = "raw"
 
 chart_version = "0.2.5"
 
-create_namespace     = true
+create_namespace = true
 
 kubernetes_namespace = "echo"
 
-atomic          = true
+atomic = true
 
 cleanup_on_fail = true
 
-timeout         = 300
+timeout = 300
 
-wait            = true
+wait = true

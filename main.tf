@@ -36,10 +36,10 @@ resource "helm_release" "this" {
 
   name = module.this.name
 
-  chart         = var.chart
-  description   = var.description
-  devel         = var.devel
-  version       = var.chart_version
+  chart       = var.chart
+  description = var.description
+  devel       = var.devel
+  version     = var.chart_version
 
   repository           = var.repository
   repository_ca_file   = var.repository_ca_file
