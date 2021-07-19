@@ -1,5 +1,6 @@
+
 <!-- markdownlint-disable -->
-# terraform-example-module [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-example-module.svg)](https://github.com/cloudposse/terraform-example-module/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com) [![Discourse Forum](https://img.shields.io/discourse/https/ask.sweetops.com/posts.svg)](https://ask.sweetops.com/)
+# terraform-aws-helm-release [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-helm-release.svg)](https://github.com/cloudposse/terraform-aws-helm-release/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com) [![Discourse Forum](https://img.shields.io/discourse/https/ask.sweetops.com/posts.svg)](https://ask.sweetops.com/)
 <!-- markdownlint-restore -->
 
 [![README Header][readme_header_img]][readme_header_link]
@@ -27,9 +28,7 @@
 
 -->
 
-This is `terraform-example-module` project provides all the scaffolding for a typical well-built Cloud Posse module. It's a template repository you can
-use when creating new repositories.
-
+This `terraform-aws-helm-release` module creates a helm chart with an option to create an EKS IAM role.
 
 ---
 
@@ -61,23 +60,22 @@ We literally have [*hundreds of terraform modules*][terraform_modules] that are 
 
 
 
-
 ## Security & Compliance [<img src="https://cloudposse.com/wp-content/uploads/2020/11/bridgecrew.svg" width="250" align="right" />](https://bridgecrew.io/)
 
 Security scanning is graciously provided by Bridgecrew. Bridgecrew is the leading fully hosted, cloud-native solution providing continuous Terraform security and compliance.
 
 | Benchmark | Description |
 |--------|---------------|
-| [![Infrastructure Security](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-example-module/general)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-example-module&benchmark=INFRASTRUCTURE+SECURITY) | Infrastructure Security Compliance |
-| [![CIS KUBERNETES](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-example-module/cis_kubernetes)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-example-module&benchmark=CIS+KUBERNETES+V1.5) | Center for Internet Security, KUBERNETES Compliance |
-| [![CIS AWS](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-example-module/cis_aws)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-example-module&benchmark=CIS+AWS+V1.2) | Center for Internet Security, AWS Compliance |
-| [![CIS AZURE](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-example-module/cis_azure)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-example-module&benchmark=CIS+AZURE+V1.1) | Center for Internet Security, AZURE Compliance |
-| [![PCI-DSS](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-example-module/pci)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-example-module&benchmark=PCI-DSS+V3.2) | Payment Card Industry Data Security Standards Compliance |
-| [![NIST-800-53](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-example-module/nist)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-example-module&benchmark=NIST-800-53) | National Institute of Standards and Technology Compliance |
-| [![ISO27001](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-example-module/iso)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-example-module&benchmark=ISO27001) | Information Security Management System, ISO/IEC 27001 Compliance |
-| [![SOC2](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-example-module/soc2)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-example-module&benchmark=SOC2)| Service Organization Control 2 Compliance |
-| [![CIS GCP](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-example-module/cis_gcp)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-example-module&benchmark=CIS+GCP+V1.1) | Center for Internet Security, GCP Compliance |
-| [![HIPAA](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-example-module/hipaa)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-example-module&benchmark=HIPAA) | Health Insurance Portability and Accountability Compliance |
+| [![Infrastructure Security](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-aws-helm-release/general)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-aws-helm-release&benchmark=INFRASTRUCTURE+SECURITY) | Infrastructure Security Compliance |
+| [![CIS KUBERNETES](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-aws-helm-release/cis_kubernetes)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-aws-helm-release&benchmark=CIS+KUBERNETES+V1.5) | Center for Internet Security, KUBERNETES Compliance |
+| [![CIS AWS](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-aws-helm-release/cis_aws)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-aws-helm-release&benchmark=CIS+AWS+V1.2) | Center for Internet Security, AWS Compliance |
+| [![CIS AZURE](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-aws-helm-release/cis_azure)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-aws-helm-release&benchmark=CIS+AZURE+V1.1) | Center for Internet Security, AZURE Compliance |
+| [![PCI-DSS](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-aws-helm-release/pci)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-aws-helm-release&benchmark=PCI-DSS+V3.2) | Payment Card Industry Data Security Standards Compliance |
+| [![NIST-800-53](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-aws-helm-release/nist)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-aws-helm-release&benchmark=NIST-800-53) | National Institute of Standards and Technology Compliance |
+| [![ISO27001](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-aws-helm-release/iso)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-aws-helm-release&benchmark=ISO27001) | Information Security Management System, ISO/IEC 27001 Compliance |
+| [![SOC2](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-aws-helm-release/soc2)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-aws-helm-release&benchmark=SOC2)| Service Organization Control 2 Compliance |
+| [![CIS GCP](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-aws-helm-release/cis_gcp)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-aws-helm-release&benchmark=CIS+GCP+V1.1) | Center for Internet Security, GCP Compliance |
+| [![HIPAA](https://www.bridgecrew.cloud/badges/github/cloudposse/terraform-aws-helm-release/hipaa)](https://www.bridgecrew.cloud/link/badge?vcs=github&fullRepo=cloudposse%2Fterraform-aws-helm-release&benchmark=HIPAA) | Health Insurance Portability and Accountability Compliance |
 
 
 
@@ -101,9 +99,47 @@ For automated tests of the complete example using [bats](https://github.com/bats
 (which tests and deploys the example on AWS), see [test](test).
 
 ```hcl
-module "example" {
-  source = "https://github.com/cloudposse/terraform-example-module.git?ref=master"
-  example = "Hello world!"
+module "helm_release" {
+  source  = "cloudposse/helm-release/aws"
+  # Cloud Posse recommends pinning every module to a specific version
+  # version = "x.x.x"
+
+  name = "echo"
+
+  repository    = "https://charts.helm.sh/incubator"
+  chart         = "raw"
+  chart_version = "0.2.5"
+
+  create_namespace     = true
+  kubernetes_namespace = "echo"
+
+  atomic          = true
+  cleanup_on_fail = true
+  timeout         = 300
+  wait            = true
+
+  # these values will be deep merged
+  # values = [
+  # ]
+
+  iam_role_enabled = true
+
+  iam_policy_statements = [
+    {
+      sid        = "ListMyBucket"
+      effect     = "Allow"
+      actions    = ["s3:ListBucket"]
+      resources  = ["arn:aws:s3:::test"]
+      conditions = []
+    },
+    {
+      sid        = "WriteMyBucket"
+      effect     = "Allow"
+      actions    = ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"]
+      resources  = ["arn:aws:s3:::test/*"]
+      conditions = []
+    },
+  ]
 }
 ```
 
@@ -113,7 +149,7 @@ module "example" {
 ## Examples
 
 Here is an example of using this module:
-- [`examples/complete`](https://github.com/cloudposse/terraform-example-module/) - complete example of using this module
+- [`examples/complete`](https://github.com/cloudposse/terraform-aws-helm-release/) - complete example of using this module
 
 
 
@@ -134,54 +170,115 @@ Available targets:
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.13 |
-| local | >= 1.2 |
-| random | >= 2.2 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
+| <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 2.2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| random | >= 2.2 |
+| <a name="provider_helm"></a> [helm](#provider\_helm) | >= 2.2 |
+
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_eks_iam_policy"></a> [eks\_iam\_policy](#module\_eks\_iam\_policy) | cloudposse/iam-policy/aws | 0.1.0 |
+| <a name="module_eks_iam_role"></a> [eks\_iam\_role](#module\_eks\_iam\_role) | cloudposse/eks-iam-role/aws | 0.8.0 |
+| <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.24.1 |
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [helm_release.this](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| additional\_tag\_map | Additional tags for appending to tags\_as\_list\_of\_maps. Not added to `tags`. | `map(string)` | `{}` | no |
-| attributes | Additional attributes (e.g. `1`) | `list(string)` | `[]` | no |
-| context | Single object for setting entire context at once.<br>See description of individual variables for details.<br>Leave string and numeric variables as `null` to use default value.<br>Individual variable settings (non-null) override settings in context object,<br>except for attributes, tags, and additional\_tag\_map, which are merged. | `any` | <pre>{<br>  "additional_tag_map": {},<br>  "attributes": [],<br>  "delimiter": null,<br>  "enabled": true,<br>  "environment": null,<br>  "id_length_limit": null,<br>  "label_key_case": null,<br>  "label_order": [],<br>  "label_value_case": null,<br>  "name": null,<br>  "namespace": null,<br>  "regex_replace_chars": null,<br>  "stage": null,<br>  "tags": {}<br>}</pre> | no |
-| delimiter | Delimiter to be used between `namespace`, `environment`, `stage`, `name` and `attributes`.<br>Defaults to `-` (hyphen). Set to `""` to use no delimiter at all. | `string` | `null` | no |
-| enabled | Set to false to prevent the module from creating any resources | `bool` | `null` | no |
-| environment | Environment, e.g. 'uw2', 'us-west-2', OR 'prod', 'staging', 'dev', 'UAT' | `string` | `null` | no |
-| example | Example variable | `string` | `"hello world"` | no |
-| id\_length\_limit | Limit `id` to this many characters (minimum 6).<br>Set to `0` for unlimited length.<br>Set to `null` for default, which is `0`.<br>Does not affect `id_full`. | `number` | `null` | no |
-| label\_key\_case | The letter case of label keys (`tag` names) (i.e. `name`, `namespace`, `environment`, `stage`, `attributes`) to use in `tags`.<br>Possible values: `lower`, `title`, `upper`.<br>Default value: `title`. | `string` | `null` | no |
-| label\_order | The naming order of the id output and Name tag.<br>Defaults to ["namespace", "environment", "stage", "name", "attributes"].<br>You can omit any of the 5 elements, but at least one must be present. | `list(string)` | `null` | no |
-| label\_value\_case | The letter case of output label values (also used in `tags` and `id`).<br>Possible values: `lower`, `title`, `upper` and `none` (no transformation).<br>Default value: `lower`. | `string` | `null` | no |
-| name | Solution name, e.g. 'app' or 'jenkins' | `string` | `null` | no |
-| namespace | Namespace, which could be your organization name or abbreviation, e.g. 'eg' or 'cp' | `string` | `null` | no |
-| regex\_replace\_chars | Regex to replace chars with empty string in `namespace`, `environment`, `stage` and `name`.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
-| stage | Stage, e.g. 'prod', 'staging', 'dev', OR 'source', 'build', 'test', 'deploy', 'release' | `string` | `null` | no |
-| tags | Additional tags (e.g. `map('BusinessUnit','XYZ')` | `map(string)` | `{}` | no |
+| <a name="input_additional_tag_map"></a> [additional\_tag\_map](#input\_additional\_tag\_map) | Additional tags for appending to tags\_as\_list\_of\_maps. Not added to `tags`. | `map(string)` | `{}` | no |
+| <a name="input_atomic"></a> [atomic](#input\_atomic) | If set, installation process purges chart on fail. The wait flag will be set automatically if atomic is used. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_attributes"></a> [attributes](#input\_attributes) | Additional attributes (e.g. `1`) | `list(string)` | `[]` | no |
+| <a name="input_aws_account_number"></a> [aws\_account\_number](#input\_aws\_account\_number) | AWS account number of EKS cluster owner. | `string` | `null` | no |
+| <a name="input_aws_partition"></a> [aws\_partition](#input\_aws\_partition) | AWS partition: `aws`, `aws-cn`, or `aws-us-gov`. Applicable when `var.iam_role_enabled` is `true`. | `string` | `"aws"` | no |
+| <a name="input_chart"></a> [chart](#input\_chart) | Chart name to be installed. The chart name can be local path, a URL to a chart, or the name of the chart if `repository` is specified. It is also possible to use the `<repository>/<chart>` format here if you are running Terraform on a system that the repository has been added to with `helm repo add` but this is not recommended. | `string` | n/a | yes |
+| <a name="input_chart_version"></a> [chart\_version](#input\_chart\_version) | Specify the exact chart version to install. If this is not specified, the latest version is installed. | `string` | `null` | no |
+| <a name="input_cleanup_on_fail"></a> [cleanup\_on\_fail](#input\_cleanup\_on\_fail) | Allow deletion of new resources created in this upgrade when upgrade fails. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_context"></a> [context](#input\_context) | Single object for setting entire context at once.<br>See description of individual variables for details.<br>Leave string and numeric variables as `null` to use default value.<br>Individual variable settings (non-null) override settings in context object,<br>except for attributes, tags, and additional\_tag\_map, which are merged. | `any` | <pre>{<br>  "additional_tag_map": {},<br>  "attributes": [],<br>  "delimiter": null,<br>  "enabled": true,<br>  "environment": null,<br>  "id_length_limit": null,<br>  "label_key_case": null,<br>  "label_order": [],<br>  "label_value_case": null,<br>  "name": null,<br>  "namespace": null,<br>  "regex_replace_chars": null,<br>  "stage": null,<br>  "tags": {}<br>}</pre> | no |
+| <a name="input_create_namespace"></a> [create\_namespace](#input\_create\_namespace) | Create the namespace if it does not yet exist. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_delimiter"></a> [delimiter](#input\_delimiter) | Delimiter to be used between `namespace`, `environment`, `stage`, `name` and `attributes`.<br>Defaults to `-` (hyphen). Set to `""` to use no delimiter at all. | `string` | `null` | no |
+| <a name="input_dependency_update"></a> [dependency\_update](#input\_dependency\_update) | Runs helm dependency update before installing the chart. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_description"></a> [description](#input\_description) | Release description attribute (visible in the history). | `string` | `null` | no |
+| <a name="input_devel"></a> [devel](#input\_devel) | Use chart development versions, too. Equivalent to version `>0.0.0-0`. If version is set, this is ignored. | `bool` | `null` | no |
+| <a name="input_disable_openapi_validation"></a> [disable\_openapi\_validation](#input\_disable\_openapi\_validation) | If set, the installation process will not validate rendered templates against the Kubernetes OpenAPI Schema. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_disable_webhooks"></a> [disable\_webhooks](#input\_disable\_webhooks) | Prevent hooks from running. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_eks_cluster_oidc_issuer_url"></a> [eks\_cluster\_oidc\_issuer\_url](#input\_eks\_cluster\_oidc\_issuer\_url) | OIDC issuer URL for the EKS cluster (initial "https://" may be omitted). | `string` | `""` | no |
+| <a name="input_enabled"></a> [enabled](#input\_enabled) | Set to false to prevent the module from creating any resources | `bool` | `null` | no |
+| <a name="input_environment"></a> [environment](#input\_environment) | Environment, e.g. 'uw2', 'us-west-2', OR 'prod', 'staging', 'dev', 'UAT' | `string` | `null` | no |
+| <a name="input_force_update"></a> [force\_update](#input\_force\_update) | Force resource update through delete/recreate if needed. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_iam_policy_statements"></a> [iam\_policy\_statements](#input\_iam\_policy\_statements) | IAM policy for the service account. Required if `var.iam_role_enabled` is `true`. This will not do variable replacements. Please see `var.iam_policy_statements_template_path`. | `any` | `{}` | no |
+| <a name="input_iam_role_enabled"></a> [iam\_role\_enabled](#input\_iam\_role\_enabled) | Whether to create an IAM role. Setting this to `true` will also replace any occurrences of `{service_account_role_arn}` in `var.values_template_path` with the ARN of the IAM role created by this module. | `bool` | `false` | no |
+| <a name="input_iam_source_json_url"></a> [iam\_source\_json\_url](#input\_iam\_source\_json\_url) | IAM source json policy to download. This will be used as the `source_json` meaning the `var.iam_policy_statements` and `var.iam_policy_statements_template_path` can override it. | `string` | `null` | no |
+| <a name="input_id_length_limit"></a> [id\_length\_limit](#input\_id\_length\_limit) | Limit `id` to this many characters (minimum 6).<br>Set to `0` for unlimited length.<br>Set to `null` for default, which is `0`.<br>Does not affect `id_full`. | `number` | `null` | no |
+| <a name="input_keyring"></a> [keyring](#input\_keyring) | Location of public keys used for verification. Used only if `verify` is true. Defaults to `/.gnupg/pubring.gpg` in the location set by `home`. | `string` | `null` | no |
+| <a name="input_kubernetes_namespace"></a> [kubernetes\_namespace](#input\_kubernetes\_namespace) | The namespace to install the release into. Defaults to `default`. | `string` | `null` | no |
+| <a name="input_label_key_case"></a> [label\_key\_case](#input\_label\_key\_case) | The letter case of label keys (`tag` names) (i.e. `name`, `namespace`, `environment`, `stage`, `attributes`) to use in `tags`.<br>Possible values: `lower`, `title`, `upper`.<br>Default value: `title`. | `string` | `null` | no |
+| <a name="input_label_order"></a> [label\_order](#input\_label\_order) | The naming order of the id output and Name tag.<br>Defaults to ["namespace", "environment", "stage", "name", "attributes"].<br>You can omit any of the 5 elements, but at least one must be present. | `list(string)` | `null` | no |
+| <a name="input_label_value_case"></a> [label\_value\_case](#input\_label\_value\_case) | The letter case of output label values (also used in `tags` and `id`).<br>Possible values: `lower`, `title`, `upper` and `none` (no transformation).<br>Default value: `lower`. | `string` | `null` | no |
+| <a name="input_lint"></a> [lint](#input\_lint) | Run the helm chart linter during the plan. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_max_history"></a> [max\_history](#input\_max\_history) | Maximum number of release versions stored per release. Defaults to `0` (no limit). | `number` | `null` | no |
+| <a name="input_name"></a> [name](#input\_name) | Solution name, e.g. 'app' or 'jenkins' | `string` | `null` | no |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace, which could be your organization name or abbreviation, e.g. 'eg' or 'cp' | `string` | `null` | no |
+| <a name="input_postrender_binary_path"></a> [postrender\_binary\_path](#input\_postrender\_binary\_path) | Relative or full path to command binary. | `string` | `null` | no |
+| <a name="input_recreate_pods"></a> [recreate\_pods](#input\_recreate\_pods) | Perform pods restart during upgrade/rollback. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_regex_replace_chars"></a> [regex\_replace\_chars](#input\_regex\_replace\_chars) | Regex to replace chars with empty string in `namespace`, `environment`, `stage` and `name`.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
+| <a name="input_render_subchart_notes"></a> [render\_subchart\_notes](#input\_render\_subchart\_notes) | If set, render subchart notes along with the parent. Defaults to `true`. | `bool` | `null` | no |
+| <a name="input_replace"></a> [replace](#input\_replace) | Re-use the given name, even if that name is already used. This is unsafe in production. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_repository"></a> [repository](#input\_repository) | Repository URL where to locate the requested chart. | `string` | `null` | no |
+| <a name="input_repository_ca_file"></a> [repository\_ca\_file](#input\_repository\_ca\_file) | The Repositories CA file. | `string` | `null` | no |
+| <a name="input_repository_cert_file"></a> [repository\_cert\_file](#input\_repository\_cert\_file) | The repositories cert file. | `string` | `null` | no |
+| <a name="input_repository_key_file"></a> [repository\_key\_file](#input\_repository\_key\_file) | The repositories cert key file. | `string` | `null` | no |
+| <a name="input_repository_password"></a> [repository\_password](#input\_repository\_password) | Password for HTTP basic authentication against the repository. | `string` | `null` | no |
+| <a name="input_repository_username"></a> [repository\_username](#input\_repository\_username) | Username for HTTP basic authentication against the repository. | `string` | `null` | no |
+| <a name="input_reset_values"></a> [reset\_values](#input\_reset\_values) | When upgrading, reset the values to the ones built into the chart. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_reuse_values"></a> [reuse\_values](#input\_reuse\_values) | When upgrading, reuse the last release's values and merge in any overrides. If `reset_values` is specified, this is ignored. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_service_account_name"></a> [service\_account\_name](#input\_service\_account\_name) | Kubernetes ServiceAccount name. Required if `var.iam_role_enabled` is `true`. | `string` | `null` | no |
+| <a name="input_service_account_namespace"></a> [service\_account\_namespace](#input\_service\_account\_namespace) | Kubernetes Namespace where service account is deployed. Required if `var.iam_role_enabled` is `true`. | `string` | `null` | no |
+| <a name="input_set"></a> [set](#input\_set) | Value block with custom values to be merged with the values yaml. | <pre>list(object({<br>    name  = string<br>    value = string<br>    type  = string<br>  }))</pre> | `[]` | no |
+| <a name="input_set_sensitive"></a> [set\_sensitive](#input\_set\_sensitive) | Value block with custom sensitive values to be merged with the values yaml that won't be exposed in the plan's diff. | <pre>list(object({<br>    name  = string<br>    value = string<br>    type  = string<br>  }))</pre> | `[]` | no |
+| <a name="input_skip_crds"></a> [skip\_crds](#input\_skip\_crds) | If set, no CRDs will be installed. By default, CRDs are installed if not already present. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_stage"></a> [stage](#input\_stage) | Stage, e.g. 'prod', 'staging', 'dev', OR 'source', 'build', 'test', 'deploy', 'release' | `string` | `null` | no |
+| <a name="input_tags"></a> [tags](#input\_tags) | Additional tags (e.g. `map('BusinessUnit','XYZ')` | `map(string)` | `{}` | no |
+| <a name="input_timeout"></a> [timeout](#input\_timeout) | Time in seconds to wait for any individual kubernetes operation (like Jobs for hooks). Defaults to `300` seconds. | `number` | `null` | no |
+| <a name="input_values"></a> [values](#input\_values) | List of values in raw yaml to pass to helm. Values will be merged, in order, as Helm does with multiple `-f` options. | `any` | `null` | no |
+| <a name="input_verify"></a> [verify](#input\_verify) | Verify the package before installing it. Helm uses a provenance file to verify the integrity of the chart; this must be hosted alongside the chart. For more information see the Helm Documentation. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_wait"></a> [wait](#input\_wait) | Will wait until all resources are in a ready state before marking the release as successful. It will wait for as long as `timeout`. Defaults to `true`. | `bool` | `null` | no |
+| <a name="input_wait_for_jobs"></a> [wait\_for\_jobs](#input\_wait\_for\_jobs) | If wait is enabled, will wait until all Jobs have been completed before marking the release as successful. It will wait for as long as `timeout`. Defaults to `false`. | `bool` | `null` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| example | Example output |
-| id | ID of the created example |
-| random | Stable random number for this example |
-
+| <a name="output_metadata"></a> [metadata](#output\_metadata) | Block status of the deployed release. |
+| <a name="output_service_account_name"></a> [service\_account\_name](#output\_service\_account\_name) | Kubernetes Service Account name |
+| <a name="output_service_account_namespace"></a> [service\_account\_namespace](#output\_service\_account\_namespace) | Kubernetes Service Account namespace |
+| <a name="output_service_account_policy_arn"></a> [service\_account\_policy\_arn](#output\_service\_account\_policy\_arn) | IAM policy ARN |
+| <a name="output_service_account_policy_id"></a> [service\_account\_policy\_id](#output\_service\_account\_policy\_id) | IAM policy ID |
+| <a name="output_service_account_policy_name"></a> [service\_account\_policy\_name](#output\_service\_account\_policy\_name) | IAM policy name |
+| <a name="output_service_account_role_arn"></a> [service\_account\_role\_arn](#output\_service\_account\_role\_arn) | IAM role ARN |
+| <a name="output_service_account_role_name"></a> [service\_account\_role\_name](#output\_service\_account\_role\_name) | IAM role name |
+| <a name="output_service_account_role_unique_id"></a> [service\_account\_role\_unique\_id](#output\_service\_account\_role\_unique\_id) | IAM role unique ID |
 <!-- markdownlint-restore -->
 
 
 
 ## Share the Love
 
-Like this project? Please give it a ★ on [our GitHub](https://github.com/cloudposse/terraform-example-module)! (it helps us **a lot**)
+Like this project? Please give it a ★ on [our GitHub](https://github.com/cloudposse/terraform-aws-helm-release)! (it helps us **a lot**)
 
 Are you using this project or any of our other projects? Consider [leaving a testimonial][testimonial]. =)
+
 
 
 ## Related Projects
@@ -191,15 +288,12 @@ Check out these related projects.
 - [terraform-null-label](https://github.com/cloudposse/terraform-null-label) - Terraform module designed to generate consistent names and tags for resources. Use terraform-null-label to implement a strict naming convention.
 
 
-
-
 ## References
 
 For additional context, refer to some of these links.
 
 - [Terraform Standard Module Structure](https://www.terraform.io/docs/modules/index.html#standard-module-structure) - HashiCorp's standard module structure is a file and directory layout we recommend for reusable modules distributed in separate repositories.
 - [Terraform Module Requirements](https://www.terraform.io/docs/registry/modules/publish.html#requirements) - HashiCorp's guidance on all the requirements for publishing a module. Meeting the requirements for publishing a module is extremely easy.
-- [Terraform `random_integer` Resource](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) - The resource random_integer generates random values from a given range, described by the min and max attributes of a given resource.
 - [Terraform Version Pinning](https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version) - The required_version setting can be used to constrain which versions of the Terraform CLI can be used with your configuration
 
 
@@ -207,7 +301,7 @@ For additional context, refer to some of these links.
 
 **Got a question?** We got answers.
 
-File a GitHub [issue](https://github.com/cloudposse/terraform-example-module/issues), send us an [email][email] or join our [Slack Community][slack].
+File a GitHub [issue](https://github.com/cloudposse/terraform-aws-helm-release/issues), send us an [email][email] or join our [Slack Community][slack].
 
 [![README Commercial Support][readme_commercial_support_img]][readme_commercial_support_link]
 
@@ -255,7 +349,7 @@ Sign up for [our newsletter][newsletter] that covers everything on our technolog
 
 ### Bug Reports & Feature Requests
 
-Please use the [issue tracker](https://github.com/cloudposse/terraform-example-module/issues) to report any bugs or file feature requests.
+Please use the [issue tracker](https://github.com/cloudposse/terraform-aws-helm-release/issues) to report any bugs or file feature requests.
 
 ### Developing
 
@@ -275,7 +369,7 @@ In general, PRs are welcome. We follow the typical "fork-and-pull" Git workflow.
 
 ## Copyrights
 
-Copyright © 2020-2021 [Cloud Posse, LLC](https://cloudposse.com)
+Copyright © 2021-2021 [Cloud Posse, LLC](https://cloudposse.com)
 
 
 
@@ -335,43 +429,45 @@ Check out [our other projects][github], [follow us on twitter][twitter], [apply 
 ### Contributors
 
 <!-- markdownlint-disable -->
-|  [![Erik Osterman][osterman_avatar]][osterman_homepage]<br/>[Erik Osterman][osterman_homepage] |
-|---|
+|  [![Erik Osterman][osterman_avatar]][osterman_homepage]<br/>[Erik Osterman][osterman_homepage] | [![RB][nitrocode_avatar]][nitrocode_homepage]<br/>[RB][nitrocode_homepage] |
+|---|---|
 <!-- markdownlint-restore -->
 
   [osterman_homepage]: https://github.com/osterman
   [osterman_avatar]: https://img.cloudposse.com/150x150/https://github.com/osterman.png
+  [nitrocode_homepage]: https://github.com/nitrocode
+  [nitrocode_avatar]: https://img.cloudposse.com/150x150/https://github.com/nitrocode.png
 
 [![README Footer][readme_footer_img]][readme_footer_link]
 [![Beacon][beacon]][website]
 
   [logo]: https://cloudposse.com/logo-300x69.svg
-  [docs]: https://cpco.io/docs?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=docs
-  [website]: https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=website
-  [github]: https://cpco.io/github?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=github
-  [jobs]: https://cpco.io/jobs?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=jobs
-  [hire]: https://cpco.io/hire?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=hire
-  [slack]: https://cpco.io/slack?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=slack
-  [linkedin]: https://cpco.io/linkedin?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=linkedin
-  [twitter]: https://cpco.io/twitter?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=twitter
-  [testimonial]: https://cpco.io/leave-testimonial?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=testimonial
-  [office_hours]: https://cloudposse.com/office-hours?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=office_hours
-  [newsletter]: https://cpco.io/newsletter?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=newsletter
-  [discourse]: https://ask.sweetops.com/?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=discourse
-  [email]: https://cpco.io/email?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=email
-  [commercial_support]: https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=commercial_support
-  [we_love_open_source]: https://cpco.io/we-love-open-source?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=we_love_open_source
-  [terraform_modules]: https://cpco.io/terraform-modules?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=terraform_modules
+  [docs]: https://cpco.io/docs?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=docs
+  [website]: https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=website
+  [github]: https://cpco.io/github?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=github
+  [jobs]: https://cpco.io/jobs?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=jobs
+  [hire]: https://cpco.io/hire?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=hire
+  [slack]: https://cpco.io/slack?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=slack
+  [linkedin]: https://cpco.io/linkedin?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=linkedin
+  [twitter]: https://cpco.io/twitter?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=twitter
+  [testimonial]: https://cpco.io/leave-testimonial?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=testimonial
+  [office_hours]: https://cloudposse.com/office-hours?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=office_hours
+  [newsletter]: https://cpco.io/newsletter?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=newsletter
+  [discourse]: https://ask.sweetops.com/?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=discourse
+  [email]: https://cpco.io/email?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=email
+  [commercial_support]: https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=commercial_support
+  [we_love_open_source]: https://cpco.io/we-love-open-source?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=we_love_open_source
+  [terraform_modules]: https://cpco.io/terraform-modules?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=terraform_modules
   [readme_header_img]: https://cloudposse.com/readme/header/img
-  [readme_header_link]: https://cloudposse.com/readme/header/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=readme_header_link
+  [readme_header_link]: https://cloudposse.com/readme/header/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=readme_header_link
   [readme_footer_img]: https://cloudposse.com/readme/footer/img
-  [readme_footer_link]: https://cloudposse.com/readme/footer/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=readme_footer_link
+  [readme_footer_link]: https://cloudposse.com/readme/footer/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=readme_footer_link
   [readme_commercial_support_img]: https://cloudposse.com/readme/commercial-support/img
-  [readme_commercial_support_link]: https://cloudposse.com/readme/commercial-support/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-example-module&utm_content=readme_commercial_support_link
-  [share_twitter]: https://twitter.com/intent/tweet/?text=terraform-example-module&url=https://github.com/cloudposse/terraform-example-module
-  [share_linkedin]: https://www.linkedin.com/shareArticle?mini=true&title=terraform-example-module&url=https://github.com/cloudposse/terraform-example-module
-  [share_reddit]: https://reddit.com/submit/?url=https://github.com/cloudposse/terraform-example-module
-  [share_facebook]: https://facebook.com/sharer/sharer.php?u=https://github.com/cloudposse/terraform-example-module
-  [share_googleplus]: https://plus.google.com/share?url=https://github.com/cloudposse/terraform-example-module
-  [share_email]: mailto:?subject=terraform-example-module&body=https://github.com/cloudposse/terraform-example-module
-  [beacon]: https://ga-beacon.cloudposse.com/UA-76589703-4/cloudposse/terraform-example-module?pixel&cs=github&cm=readme&an=terraform-example-module
+  [readme_commercial_support_link]: https://cloudposse.com/readme/commercial-support/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=readme_commercial_support_link
+  [share_twitter]: https://twitter.com/intent/tweet/?text=terraform-aws-helm-release&url=https://github.com/cloudposse/terraform-aws-helm-release
+  [share_linkedin]: https://www.linkedin.com/shareArticle?mini=true&title=terraform-aws-helm-release&url=https://github.com/cloudposse/terraform-aws-helm-release
+  [share_reddit]: https://reddit.com/submit/?url=https://github.com/cloudposse/terraform-aws-helm-release
+  [share_facebook]: https://facebook.com/sharer/sharer.php?u=https://github.com/cloudposse/terraform-aws-helm-release
+  [share_googleplus]: https://plus.google.com/share?url=https://github.com/cloudposse/terraform-aws-helm-release
+  [share_email]: mailto:?subject=terraform-aws-helm-release&body=https://github.com/cloudposse/terraform-aws-helm-release
+  [beacon]: https://ga-beacon.cloudposse.com/UA-76589703-4/cloudposse/terraform-aws-helm-release?pixel&cs=github&cm=readme&an=terraform-aws-helm-release

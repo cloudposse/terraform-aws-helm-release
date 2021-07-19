@@ -5,7 +5,7 @@
 #
 
 # Name of this project
-name: terraform-example-module
+name: terraform-aws-helm-release
 
 # Logo for this project
 #logo: docs/logo.png
@@ -17,16 +17,16 @@ license: "APACHE2"
 copyrights:
   - name: "Cloud Posse, LLC"
     url: "https://cloudposse.com"
-    year: "2020"
+    year: "2021"
 
 # Canonical GitHub repo
-github_repo: cloudposse/terraform-example-module
+github_repo: cloudposse/terraform-aws-helm-release
 
 # Badges to display
 badges:
   - name: "Latest Release"
-    image: "https://img.shields.io/github/release/cloudposse/terraform-example-module.svg"
-    url: "https://github.com/cloudposse/terraform-example-module/releases/latest"
+    image: "https://img.shields.io/github/release/cloudposse/terraform-aws-helm-release.svg"
+    url: "https://github.com/cloudposse/terraform-aws-helm-release/releases/latest"
   - name: "Slack Community"
     image: "https://slack.cloudposse.com/badge.svg"
     url: "https://slack.cloudposse.com"
@@ -48,17 +48,13 @@ references:
   - name: "Terraform Module Requirements"
     description: "HashiCorp's guidance on all the requirements for publishing a module. Meeting the requirements for publishing a module is extremely easy."
     url: "https://www.terraform.io/docs/registry/modules/publish.html#requirements"
-  - name: "Terraform `random_integer` Resource"
-    description: "The resource random_integer generates random values from a given range, described by the min and max attributes of a given resource."
-    url: "https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer"
   - name: "Terraform Version Pinning"
     description: "The required_version setting can be used to constrain which versions of the Terraform CLI can be used with your configuration"
     url: "https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version"
 
 # Short description of this project
 description: |-
-  This is `terraform-example-module` project provides all the scaffolding for a typical well-built Cloud Posse module. It's a template repository you can
-  use when creating new repositories.
+  This `terraform-aws-helm-release` module creates a helm chart with an option to create an EKS IAM role.
 
 # Introduction to the project
 #introduction: |-
@@ -67,21 +63,59 @@ description: |-
 # How to use this module. Should be an easy example to copy and paste.
 usage: |-
   For a complete example, see [examples/complete](examples/complete).
-  
+
   For automated tests of the complete example using [bats](https://github.com/bats-core/bats-core) and [Terratest](https://github.com/gruntwork-io/terratest)
   (which tests and deploys the example on AWS), see [test](test).
 
   ```hcl
-  module "example" {
-    source = "https://github.com/cloudposse/terraform-example-module.git?ref=master"
-    example = "Hello world!"
+  module "helm_release" {
+    source  = "cloudposse/helm-release/aws"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version = "x.x.x"
+
+    name = "echo"
+
+    repository    = "https://charts.helm.sh/incubator"
+    chart         = "raw"
+    chart_version = "0.2.5"
+
+    create_namespace     = true
+    kubernetes_namespace = "echo"
+
+    atomic          = true
+    cleanup_on_fail = true
+    timeout         = 300
+    wait            = true
+
+    # these values will be deep merged
+    # values = [
+    # ]
+
+    iam_role_enabled = true
+
+    iam_policy_statements = [
+      {
+        sid        = "ListMyBucket"
+        effect     = "Allow"
+        actions    = ["s3:ListBucket"]
+        resources  = ["arn:aws:s3:::test"]
+        conditions = []
+      },
+      {
+        sid        = "WriteMyBucket"
+        effect     = "Allow"
+        actions    = ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"]
+        resources  = ["arn:aws:s3:::test/*"]
+        conditions = []
+      },
+    ]
   }
   ```
 
 # Example usage
 examples: |-
   Here is an example of using this module:
-  - [`examples/complete`](https://github.com/cloudposse/terraform-example-module/) - complete example of using this module
+  - [`examples/complete`](https://github.com/cloudposse/terraform-aws-helm-release/) - complete example of using this module
 
 # How to get started quickly
 #quickstart: |-
@@ -96,3 +130,5 @@ include:
 contributors:
   - name: "Erik Osterman"
     github: "osterman"
+  - name: "RB"
+    github: "nitrocode"
