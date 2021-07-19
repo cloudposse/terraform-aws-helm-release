@@ -28,7 +28,7 @@
 
 -->
 
-This is `terraform-aws-helm-release` project creates a helm chart with an option to create an EKS IAM role.
+This `terraform-aws-helm-release` module creates a helm chart with an option to create an EKS IAM role.
 
 ---
 
