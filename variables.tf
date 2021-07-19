@@ -24,7 +24,7 @@ variable "iam_policy_statements" {
 
 variable "aws_account_number" {
   type        = string
-  description = "AWS account number of EKS cluster owner"
+  description = "AWS account number of EKS cluster owner."
   default     = null
 }
 
