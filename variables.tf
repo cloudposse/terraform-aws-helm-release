@@ -36,7 +36,7 @@ variable "aws_partition" {
 
 variable "eks_cluster_oidc_issuer_url" {
   type        = string
-  description = "OIDC issuer URL for the EKS cluster (initial \"https://\" may be omitted)"
+  description = "OIDC issuer URL for the EKS cluster (initial \"https://\" may be omitted)."
   default     = ""
 }
 
