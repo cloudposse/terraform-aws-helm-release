@@ -9,6 +9,7 @@ module "eks_iam_policy" {
 
   enabled = local.iam_role_enabled
 
+  iam_source_json       = var.iam_source_json
   iam_source_json_url   = var.iam_source_json_url
   iam_policy_statements = var.iam_policy_statements
 
