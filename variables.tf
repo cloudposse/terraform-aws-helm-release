@@ -8,6 +8,12 @@ variable "iam_role_enabled" {
 
 ## eks_iam_policy
 
+variable "iam_source_json" {
+  type        = string
+  description = "IAM source JSON policy to use as `source_json` argument. This can be used with or instead of the `var.iam_policy_statements`. this cannot be used with `var.iam_source_json_url`."
+  default     = null
+}
+
 variable "iam_source_json_url" {
   type        = string
   description = "IAM source json policy to download. This will be used as the `source_json` meaning the `var.iam_policy_statements` and `var.iam_policy_statements_template_path` can override it."
