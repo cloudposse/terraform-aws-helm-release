@@ -87,10 +87,13 @@ usage: |-
     timeout         = 300
     wait            = true
 
-    # these values will be deep merged
+    # These values will be deep merged
     # values = [
     # ]
 
+    # Dictates which ServiceAccounts are allowed to assume the IAM Role.
+    # In this case, only the "echo" ServiceAccount in the "echo" namespace
+    # will be able to assume the IAM Role created by this module.
     service_account_name      = "echo"
     service_account_namespace = "echo"
 
