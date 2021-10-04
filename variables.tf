@@ -48,13 +48,38 @@ variable "eks_cluster_oidc_issuer_url" {
 
 variable "service_account_name" {
   type        = string
-  description = "Kubernetes ServiceAccount name. Required if `var.iam_role_enabled` is `true`."
+  description = <<-EOT
+  Name of the Kubernetes ServiceAccount allowed to assume the IAM role created when `var.iam_role_enabled` is set to `true`.
+
+  In combination with `var.service_account_namespace`, this variable is used to determine which ServiceAccounts are allowed
+  to assume the IAM role in question.
+
+  It is *not* recommended to leave this variable as `null` or `""`, as this would mean ServiceAccounts of any name in the
+  namespace specified by `var.service_account_namespace` are allowed to assume the IAM role in question. If both variables
+  are omitted, then a ServiceAccount of any name in any namespace will be able to assume the IAM role in question, which
+  is the least secure scenario.
+
+  The best practice is to set this variable to the name of the ServiceAccount created by the Helm Chart.
+  EOT
   default     = null
 }
 
 variable "service_account_namespace" {
   type        = string
-  description = "Kubernetes Namespace where service account is deployed. Required if `var.iam_role_enabled` is `true`."
+  description = <<-EOT
+  Namespace of the Kubernetes ServiceAccount allowed to assume the IAM role created when `var.iam_role_enabled` is set to
+  `true`.
+
+  In combination with `var.service_account_name`, this variable is used to determine which ServiceAccounts are allowed
+  to assume the IAM role in question.
+
+  It is *not* recommended to leave this variable as `null` or `""`, as this would mean any ServiceAccounts matching the
+  name specified by `var.service_account_name` in any namespace are allowed to assume the IAM role in question. If both
+  variables are omitted, then a ServiceAccount of any name in any namespace will be able to assume the IAM role in question,
+  which is the least secure scenario.
+
+  The best practice is to set this variable to the namespace of the ServiceAccount created by the Helm Chart.
+  EOT
   default     = null
 }
 
