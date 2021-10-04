@@ -91,6 +91,9 @@ usage: |-
     # values = [
     # ]
 
+    service_account_name      = "echo"
+    service_account_namespace = "echo"
+
     iam_role_enabled = true
 
     iam_policy_statements = [
