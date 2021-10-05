@@ -94,6 +94,15 @@ resource "helm_release" "this" {
     }
   }
 
+  dynamic "set" {
+    for_each = local.iam_role_enabled && var.service_account_role_arn_annotation_enabled ? [module.eks_iam_role.service_account_role_arn] : []
+    content {
+      name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+      value = set.value
+      type  = "string"
+    }
+  }
+
   dynamic "postrender" {
     for_each = var.postrender_binary_path != null ? [1] : []
 
