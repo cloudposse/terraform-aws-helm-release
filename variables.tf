@@ -46,6 +46,22 @@ variable "eks_cluster_oidc_issuer_url" {
   default     = ""
 }
 
+variable "service_account_role_arn_annotation_enabled" {
+  type        = bool
+  description = <<-EOT
+  Whether or not to dynamically insert an `eks.amazonaws.com/role-arn` annotation into `serviceAccount.annotations`, with the
+  value being the ARN of the IAM role created when `var.iam_role_enabled`.
+
+  Assuming the Helm Chart follows the standard convention of rendering ServiceAccount annotations in `serviceAccount.annotations`,
+  this allows the ServiceAccount created by the Helm Chart to assume the IAM Role in question via the EKS OIDC IdP, without
+  the consumer of this module having to set this annotation via `var.values` or `var.set`, which would involve manually
+  rendering the IAM Role ARN beforehand.
+
+  Ignored if `var.iam_role_enabled` is `false`.
+  EOT
+  default     = true
+}
+
 variable "service_account_name" {
   type        = string
   description = <<-EOT
@@ -67,8 +83,8 @@ variable "service_account_name" {
 variable "service_account_namespace" {
   type        = string
   description = <<-EOT
-  Namespace of the Kubernetes ServiceAccount allowed to assume the IAM role created when `var.iam_role_enabled` is set to
-  `true`.
+  Kubernetes Namespace of the Kubernetes ServiceAccount allowed to assume the IAM role created when `var.iam_role_enabled`
+  is set to `true`.
 
   In combination with `var.service_account_name`, this variable is used to determine which ServiceAccounts are allowed
   to assume the IAM role in question.
