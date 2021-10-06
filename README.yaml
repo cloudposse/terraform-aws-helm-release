@@ -118,6 +118,31 @@ usage: |-
   }
   ```
 
+  If `var.service_account_name` is set, then `var.name` can be set to "" in order to achieve a shorter name for the IAM
+  Role created for the ServiceAccount:
+
+  ```hcl
+  module "helm_release" {
+    source  = "cloudposse/helm-release/aws"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version = "x.x.x"
+
+    name = ""
+
+    create_namespace     = true
+    kubernetes_namespace = "echo"
+
+    service_account_name      = "echo"
+    service_account_namespace = "echo"
+
+    iam_role_enabled = true
+    ...
+  }
+  ```
+
+  This will result in an IAM role with a name such as: `eg-uw2-dev-echo@echo` instead of `eg-uw2-dev-echo-echo@echo`.
+  Additionally, if `var.name` is empty, the name used for the Helm Release will be that of `var.chart`.
+
 # Example usage
 examples: |-
   Here is an example of using this module:
@@ -138,3 +163,5 @@ contributors:
     github: "osterman"
   - name: "RB"
     github: "nitrocode"
+  - name: "Yonathan Koren"
+    github: "korenyoni"

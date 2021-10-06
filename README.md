@@ -149,6 +149,31 @@ module "helm_release" {
 }
 ```
 
+If `var.service_account_name` is set, then `var.name` can be set to "" in order to achieve a shorter name for the IAM
+Role created for the ServiceAccount:
+
+```hcl
+module "helm_release" {
+  source  = "cloudposse/helm-release/aws"
+  # Cloud Posse recommends pinning every module to a specific version
+  # version = "x.x.x"
+
+  name = ""
+
+  create_namespace     = true
+  kubernetes_namespace = "echo"
+
+  service_account_name      = "echo"
+  service_account_namespace = "echo"
+
+  iam_role_enabled = true
+  ...
+}
+```
+
+This will result in an IAM role with a name such as: `eg-uw2-dev-echo@echo` instead of `eg-uw2-dev-echo-echo@echo`.
+Additionally, if `var.name` is empty, the name used for the Helm Release will be that of `var.chart`.
+
 
 
 
@@ -440,14 +465,16 @@ Check out [our other projects][github], [follow us on twitter][twitter], [apply 
 ### Contributors
 
 <!-- markdownlint-disable -->
-|  [![Erik Osterman][osterman_avatar]][osterman_homepage]<br/>[Erik Osterman][osterman_homepage] | [![RB][nitrocode_avatar]][nitrocode_homepage]<br/>[RB][nitrocode_homepage] |
-|---|---|
+|  [![Erik Osterman][osterman_avatar]][osterman_homepage]<br/>[Erik Osterman][osterman_homepage] | [![RB][nitrocode_avatar]][nitrocode_homepage]<br/>[RB][nitrocode_homepage] | [![Yonathan Koren][korenyoni_avatar]][korenyoni_homepage]<br/>[Yonathan Koren][korenyoni_homepage] |
+|---|---|---|
 <!-- markdownlint-restore -->
 
   [osterman_homepage]: https://github.com/osterman
   [osterman_avatar]: https://img.cloudposse.com/150x150/https://github.com/osterman.png
   [nitrocode_homepage]: https://github.com/nitrocode
   [nitrocode_avatar]: https://img.cloudposse.com/150x150/https://github.com/nitrocode.png
+  [korenyoni_homepage]: https://github.com/korenyoni
+  [korenyoni_avatar]: https://img.cloudposse.com/150x150/https://github.com/korenyoni.png
 
 [![README Footer][readme_footer_img]][readme_footer_link]
 [![Beacon][beacon]][website]
