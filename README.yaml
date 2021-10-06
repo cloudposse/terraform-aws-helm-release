@@ -140,7 +140,7 @@ usage: |-
   }
   ```
 
-  This will result in an IAM role with a name such as: `eg-uw2-dev-echo@kube-system` instead of `eg-uw2-dev-echo-echo@kube-system`.
+  This will result in an IAM role with a name such as: `eg-uw2-dev-echo@echo` instead of `eg-uw2-dev-echo-echo@echo`.
   Additionally, if `var.name` is empty, the name used for the Helm Release will be that of `var.chart`.
 
 # Example usage
@@ -163,3 +163,5 @@ contributors:
     github: "osterman"
   - name: "RB"
     github: "nitrocode"
+  - name: "Yonathan Koren"
+    github: "korenyoni"
