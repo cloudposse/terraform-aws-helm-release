@@ -49,7 +49,7 @@ variable "eks_cluster_oidc_issuer_url" {
 variable "service_account_role_arn_annotation_enabled" {
   type        = bool
   description = <<-EOT
-  Whether or not to dynamically insert an `eks.amazonaws.com/role-arn` annotation into `${var.service_account_set_key_path}.annotations`
+  Whether or not to dynamically insert an `eks.amazonaws.com/role-arn` annotation into `$var.service_account_set_key_path.annotations`
   (by default, `serviceAccount.annotations`), with the value being the ARN of the IAM role created when `var.iam_role_enabled`.
   
   Assuming the Helm Chart follows the standard convention of rendering ServiceAccount annotations in `serviceAccount.annotations`
