@@ -62,6 +62,12 @@ variable "service_account_role_arn_annotation_enabled" {
   default     = true
 }
 
+variable "service_account_set_key_path" {
+  type = string
+  description = "Key path used in `helm --set` point to the service account in the chart values (ex.: `serviceAccount` or `rbac.serviceAccount`)"
+  default = "serviceAccount"
+}
+
 variable "service_account_name" {
   type        = string
   description = <<-EOT
