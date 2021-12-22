@@ -4,7 +4,7 @@ provider "aws" {
 
 module "label" {
   source     = "cloudposse/label/null"
-  version    = "0.24.1"
+  version    = "0.25.0"
   attributes = ["cluster"]
 
   context = module.this.context
@@ -34,7 +34,7 @@ locals {
 
 module "vpc" {
   source  = "cloudposse/vpc/aws"
-  version = "0.21.1"
+  version = "0.28.1"
 
   cidr_block = "172.16.0.0/16"
   tags       = local.tags
@@ -44,7 +44,7 @@ module "vpc" {
 
 module "subnets" {
   source  = "cloudposse/dynamic-subnets/aws"
-  version = "0.38.0"
+  version = "0.39.8"
 
   availability_zones              = var.availability_zones
   vpc_id                          = module.vpc.vpc_id
@@ -61,7 +61,7 @@ module "subnets" {
 
 module "eks_cluster" {
   source  = "cloudposse/eks-cluster/aws"
-  version = "0.39.0"
+  version = "0.44.0"
 
   region                       = var.region
   vpc_id                       = module.vpc.vpc_id
@@ -71,6 +71,22 @@ module "eks_cluster" {
   oidc_provider_enabled        = var.oidc_provider_enabled
   enabled_cluster_log_types    = var.enabled_cluster_log_types
   cluster_log_retention_period = var.cluster_log_retention_period
+
+  create_eks_service_role = true
+
+  kube_data_auth_enabled = var.kube_data_auth_enabled
+  # exec_auth is more reliable than data_auth when the aws CLI is available
+  # Details at https://github.com/cloudposse/terraform-aws-eks-cluster/releases/tag/0.42.0
+  kube_exec_auth_enabled = !var.kubeconfig_file_enabled
+  # If using `exec` method (recommended) for authentication, provide an explict
+  # IAM role ARN to exec as for authentication to EKS cluster.
+  kube_exec_auth_role_arn         = var.kube_exec_auth_role_arn
+  kube_exec_auth_role_arn_enabled = var.kube_exec_auth_role_arn_enabled
+  # Path to KUBECONFIG file to use to access the EKS cluster
+  kubeconfig_path         = var.kubeconfig_file
+  kubeconfig_path_enabled = var.kubeconfig_file_enabled
+
+  aws_auth_yaml_strip_quotes = true
 
   cluster_encryption_config_enabled                         = var.cluster_encryption_config_enabled
   cluster_encryption_config_kms_key_id                      = var.cluster_encryption_config_kms_key_id
@@ -96,7 +112,7 @@ data "null_data_source" "wait_for_cluster_and_kubernetes_configmap" {
 
 module "eks_node_group" {
   source  = "cloudposse/eks-node-group/aws"
-  version = "0.19.0"
+  version = "0.27.0"
 
   subnet_ids        = module.subnets.private_subnet_ids
   cluster_name      = data.null_data_source.wait_for_cluster_and_kubernetes_configmap.outputs["cluster_name"]
@@ -105,7 +121,6 @@ module "eks_node_group" {
   min_size          = var.min_size
   max_size          = var.max_size
   kubernetes_labels = var.kubernetes_labels
-  disk_size         = var.disk_size
 
   context = module.this.context
 }
