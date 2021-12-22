@@ -28,4 +28,9 @@ module "helm_release" {
   values = [
     file("${path.module}/values.yaml")
   ]
+
+  depends_on = [
+    module.eks_cluster,
+    module.eks_node_group,
+  ]
 }
