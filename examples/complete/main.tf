@@ -13,10 +13,6 @@ provider "helm" {
 module "helm_release" {
   source = "../../"
 
-  # source  = "cloudposse/helm-release/aws"
-  # Cloud Posse recommends pinning every module to a specific version
-  # version = "x.x.x"
-
   repository    = var.repository
   chart         = var.chart
   chart_version = var.chart_version

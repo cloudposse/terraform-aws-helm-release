@@ -36,9 +36,9 @@ cluster_encryption_config_enabled = true
 
 ## helm related
 
-repository = "https://charts.helm.sh/incubator"
+repository = "https://ealenn.github.io/charts"
 
-chart = "raw"
+chart = "echo"
 
 chart_version = "0.2.5"
 
