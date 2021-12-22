@@ -5,7 +5,7 @@ locals {
 
 module "eks_iam_policy" {
   source  = "cloudposse/iam-policy/aws"
-  version = "0.2.3"
+  version = "0.3.0"
 
   enabled = local.iam_role_enabled
 
@@ -18,12 +18,12 @@ module "eks_iam_policy" {
 
 module "eks_iam_role" {
   source  = "cloudposse/eks-iam-role/aws"
-  version = "0.10.3"
+  version = "0.11.0"
 
   enabled = local.iam_role_enabled
 
   aws_account_number          = var.aws_account_number
-  aws_iam_policy_document     = local.iam_role_enabled ? module.eks_iam_policy.json : "{}"
+  aws_iam_policy_document     = local.iam_role_enabled ? [module.eks_iam_policy.json] : ["{}"]
   aws_partition               = var.aws_partition
   eks_cluster_oidc_issuer_url = var.eks_cluster_oidc_issuer_url
   service_account_name        = var.service_account_name
