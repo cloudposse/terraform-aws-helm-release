@@ -10,7 +10,8 @@ name = "helm"
 
 ## eks related
 
-availability_zones = ["us-east-2a"]
+# Dynamic subnets must be set in at least 2 AZs
+availability_zones = ["us-east-2a", "us-east-2b"]
 
 kubernetes_version = "1.21"
 
@@ -22,11 +23,11 @@ cluster_log_retention_period = 7
 
 instance_types = ["t3.small"]
 
-desired_size = 1
+desired_size = 2
 
 max_size = 3
 
-min_size = 1
+min_size = 2
 
 kubernetes_labels = {}
 
