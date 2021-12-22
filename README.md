@@ -122,30 +122,33 @@ module "helm_release" {
   # values = [
   # ]
 
+  # Enable the IAM role
+  iam_role_enabled = true
+
+  # Add the IAM role using set()
+  service_account_role_arn_annotation_enabled = true
+
   # Dictates which ServiceAccounts are allowed to assume the IAM Role.
   # In this case, only the "echo" ServiceAccount in the "echo" namespace
   # will be able to assume the IAM Role created by this module.
   service_account_name      = "echo"
   service_account_namespace = "echo"
 
-  iam_role_enabled = true
-
-  iam_policy_statements = [
-    {
-      sid        = "ListMyBucket"
+  # IAM policy statements to add to the IAM role
+  iam_policy_statements = {
+    ListMyBucket = {
       effect     = "Allow"
       actions    = ["s3:ListBucket"]
       resources  = ["arn:aws:s3:::test"]
       conditions = []
     },
-    {
-      sid        = "WriteMyBucket"
+    WriteMyBucket = {
       effect     = "Allow"
       actions    = ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"]
       resources  = ["arn:aws:s3:::test/*"]
       conditions = []
     },
-  ]
+  }
 }
 ```
 
@@ -167,7 +170,10 @@ module "helm_release" {
   service_account_namespace = "echo"
 
   iam_role_enabled = true
-  ...
+
+  service_account_role_arn_annotation_enabled = true
+
+  # ...
 }
 ```
 
@@ -214,8 +220,8 @@ Available targets:
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_eks_iam_policy"></a> [eks\_iam\_policy](#module\_eks\_iam\_policy) | cloudposse/iam-policy/aws | 0.2.3 |
-| <a name="module_eks_iam_role"></a> [eks\_iam\_role](#module\_eks\_iam\_role) | cloudposse/eks-iam-role/aws | 0.10.3 |
+| <a name="module_eks_iam_policy"></a> [eks\_iam\_policy](#module\_eks\_iam\_policy) | cloudposse/iam-policy/aws | 0.3.0 |
+| <a name="module_eks_iam_role"></a> [eks\_iam\_role](#module\_eks\_iam\_role) | cloudposse/eks-iam-role/aws | 0.11.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 
 ## Resources
