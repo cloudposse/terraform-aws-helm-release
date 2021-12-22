@@ -1,11 +1,10 @@
 terraform {
-  required_version = ">= 0.13"
+  required_version = ">= 0.14.11"
 
   required_providers {
-    # Update these to reflect the actual requirements of your module
     helm = {
       source  = "hashicorp/helm"
-      version = ">= 2.2"
+      version = ">= 2.4.1"
     }
   }
 }
