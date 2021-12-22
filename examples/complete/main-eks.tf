@@ -74,17 +74,17 @@ module "eks_cluster" {
 
   create_eks_service_role = true
 
-  kube_data_auth_enabled = var.kube_data_auth_enabled
+  # kube_data_auth_enabled = var.kube_data_auth_enabled
   # exec_auth is more reliable than data_auth when the aws CLI is available
   # Details at https://github.com/cloudposse/terraform-aws-eks-cluster/releases/tag/0.42.0
-  kube_exec_auth_enabled = !var.kubeconfig_file_enabled
+  # kube_exec_auth_enabled = !var.kubeconfig_file_enabled
   # If using `exec` method (recommended) for authentication, provide an explict
   # IAM role ARN to exec as for authentication to EKS cluster.
-  kube_exec_auth_role_arn         = var.kube_exec_auth_role_arn
-  kube_exec_auth_role_arn_enabled = var.kube_exec_auth_role_arn_enabled
+  # kube_exec_auth_role_arn         = var.kube_exec_auth_role_arn
+  # kube_exec_auth_role_arn_enabled = var.kube_exec_auth_role_arn_enabled
   # Path to KUBECONFIG file to use to access the EKS cluster
-  kubeconfig_path         = var.kubeconfig_file
-  kubeconfig_path_enabled = var.kubeconfig_file_enabled
+  # kubeconfig_path         = var.kubeconfig_file
+  # kubeconfig_path_enabled = var.kubeconfig_file_enabled
 
   aws_auth_yaml_strip_quotes = true
 
