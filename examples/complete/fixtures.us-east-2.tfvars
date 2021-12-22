@@ -36,15 +36,15 @@ cluster_encryption_config_enabled = true
 
 ## helm related
 
-repository = "https://ealenn.github.io/charts"
+repository = "https://charts.helm.sh/incubator"
 
-chart = "echo"
+chart = "raw"
 
 chart_version = "0.2.5"
 
 create_namespace = true
 
-kubernetes_namespace = "echo"
+kubernetes_namespace = "aws-node-termination-handler"
 
 atomic = true
 
