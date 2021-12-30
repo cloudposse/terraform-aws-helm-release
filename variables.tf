@@ -69,8 +69,18 @@ variable "service_account_set_key_path" {
   The key path used by Helm Chart values for ServiceAccount-related settings (e.g. `serviceAccount` or `rbac.serviceAccount`).
   
   Ignored if either `var.service_account_role_arn_annotation_enabled` or `var.iam_role_enabled` are set to `false`.
+  
+  The %s will be replaced by the "eks\\.amazonaws\\.com/role-arn"
   EOT
-  default     = "serviceAccount"
+  default     = "serviceAccount.annotations.%s"
+}
+
+variable "service_account_set_key_path_override" {
+  type        = string
+  description = <<-EOT
+  Overrides the service account set key name. This will ignore var.service_account_set_key_path.
+  EOT
+  default     = null
 }
 
 variable "service_account_name" {
