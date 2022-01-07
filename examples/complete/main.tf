@@ -1,21 +1,9 @@
-data "aws_eks_cluster_auth" "kubernetes" {
-  name = module.eks_cluster.eks_cluster_id
-}
-
-provider "helm" {
-  kubernetes {
-    host                   = module.eks_cluster.eks_cluster_endpoint
-    token                  = data.aws_eks_cluster_auth.kubernetes.token
-    cluster_ca_certificate = base64decode(module.eks_cluster.eks_cluster_certificate_authority_data)
-  }
+locals {
+  enabled = module.this.enabled
 }
 
 module "helm_release" {
   source = "../../"
-
-  # source  = "cloudposse/helm-release/aws"
-  # Cloud Posse recommends pinning every module to a specific version
-  # version = "x.x.x"
 
   repository    = var.repository
   chart         = var.chart
@@ -31,5 +19,10 @@ module "helm_release" {
 
   values = [
     file("${path.module}/values.yaml")
+  ]
+
+  depends_on = [
+    module.eks_cluster,
+    module.eks_node_group,
   ]
 }

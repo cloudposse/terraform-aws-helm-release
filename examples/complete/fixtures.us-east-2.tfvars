@@ -10,9 +10,10 @@ name = "helm"
 
 ## eks related
 
+# Dynamic subnets must be set in at least 2 AZs
 availability_zones = ["us-east-2a", "us-east-2b"]
 
-kubernetes_version = "1.19"
+kubernetes_version = "1.21"
 
 oidc_provider_enabled = true
 
@@ -28,11 +29,14 @@ max_size = 3
 
 min_size = 2
 
-disk_size = 20
-
 kubernetes_labels = {}
 
 cluster_encryption_config_enabled = true
+
+# no role to assume
+kube_exec_auth_enabled = false
+# use data auth
+kube_data_auth_enabled = true
 
 ## helm related
 
@@ -44,7 +48,7 @@ chart_version = "0.2.5"
 
 create_namespace = true
 
-kubernetes_namespace = "echo"
+kubernetes_namespace = "aws-node-termination-handler"
 
 atomic = true
 
