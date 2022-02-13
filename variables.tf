@@ -43,7 +43,11 @@ variable "aws_partition" {
 variable "eks_cluster_oidc_issuer_url" {
   type        = string
   description = "OIDC issuer URL for the EKS cluster (initial \"https://\" may be omitted)."
-  default     = ""
+
+  validation {
+    condition     = length(var.eks_cluster_oidc_issuer_url) > 0
+    error_message = "The eks_cluster_oidc_issuer_url value must have a value."
+  }
 }
 
 variable "service_account_role_arn_annotation_enabled" {
@@ -51,13 +55,13 @@ variable "service_account_role_arn_annotation_enabled" {
   description = <<-EOT
   Whether or not to dynamically insert an `eks.amazonaws.com/role-arn` annotation into `$var.service_account_set_key_path.annotations`
   (by default, `serviceAccount.annotations`), with the value being the ARN of the IAM role created when `var.iam_role_enabled`.
-  
+
   Assuming the Helm Chart follows the standard convention of rendering ServiceAccount annotations in `serviceAccount.annotations`
   (or a similar convention, which can be overriden by `var.service_account_set_key_path` as needed),
   this allows the ServiceAccount created by the Helm Chart to assume the IAM Role in question via the EKS OIDC IdP, without
   the consumer of this module having to set this annotation via `var.values` or `var.set`, which would involve manually
   rendering the IAM Role ARN beforehand.
-  
+
   Ignored if `var.iam_role_enabled` is `false`.
   EOT
   default     = true
@@ -67,7 +71,7 @@ variable "service_account_set_key_path" {
   type        = string
   description = <<-EOT
   The key path used by Helm Chart values for ServiceAccount-related settings (e.g. `serviceAccount...` or `rbac.serviceAccount...`).
-  
+
   Ignored if either `var.service_account_role_arn_annotation_enabled` or `var.iam_role_enabled` are set to `false`.
   EOT
   default     = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
