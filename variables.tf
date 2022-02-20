@@ -121,6 +121,12 @@ variable "chart" {
   description = "Chart name to be installed. The chart name can be local path, a URL to a chart, or the name of the chart if `repository` is specified. It is also possible to use the `<repository>/<chart>` format here if you are running Terraform on a system that the repository has been added to with `helm repo add` but this is not recommended."
 }
 
+variable "release_name" {
+  type        = string
+  description = "The name of the release to be installed. If omitted, use the name input, and if that's omitted, use the chart input."
+  default     = ""
+}
+
 variable "description" {
   type        = string
   description = "Release description attribute (visible in the history)."

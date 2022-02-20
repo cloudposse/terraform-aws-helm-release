@@ -37,7 +37,7 @@ resource "helm_release" "this" {
 
   # Allows var.name to be empty, which is allowed to be the case for this module since var.name is optional in eks-iam-role.
   # For more information, see: https://github.com/cloudposse/terraform-aws-eks-iam-role
-  name = coalesce(module.this.name, var.chart)
+  name = coalesce(var.release_name, module.this.name, var.chart)
 
   chart       = var.chart
   description = var.description
