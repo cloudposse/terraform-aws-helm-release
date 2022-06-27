@@ -338,3 +338,9 @@ variable "postrender_binary_path" {
   description = "Relative or full path to command binary."
   default     = null
 }
+
+variable "permissions_boundary" {
+  type        = string
+  description = "If provided, IAM role will be created with this permissions boundary attached"
+  default     = null
+}
