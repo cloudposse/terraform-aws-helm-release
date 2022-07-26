@@ -18,7 +18,7 @@ module "eks_iam_policy" {
 
 module "eks_iam_role" {
   source  = "cloudposse/eks-iam-role/aws"
-  version = "0.11.1"
+  version = "1.1.0"
 
   enabled = local.iam_role_enabled
 
@@ -28,6 +28,7 @@ module "eks_iam_role" {
   eks_cluster_oidc_issuer_url = var.eks_cluster_oidc_issuer_url
   service_account_name        = var.service_account_name
   service_account_namespace   = var.service_account_namespace
+  permissions_boundary        = var.permissions_boundary
 
   context = module.this.context
 }

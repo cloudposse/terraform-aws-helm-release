@@ -338,3 +338,9 @@ variable "postrender_binary_path" {
   description = "Relative or full path to command binary."
   default     = null
 }
+
+variable "permissions_boundary" {
+  type        = string
+  description = "ARN of the policy that is used to set the permissions boundary for the role."
+  default     = null
+}
