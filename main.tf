@@ -5,7 +5,7 @@ locals {
 
 module "eks_iam_policy" {
   source  = "cloudposse/iam-policy/aws"
-  version = "0.3.0"
+  version = "0.4.0"
 
   enabled = local.iam_role_enabled
 
