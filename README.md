@@ -207,7 +207,7 @@ Available targets:
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 2.2 |
 
 ## Providers
@@ -487,7 +487,7 @@ Check out [our other projects][github], [follow us on twitter][twitter], [apply 
 
 [![README Footer][readme_footer_img]][readme_footer_link]
 [![Beacon][beacon]][website]
-
+<!-- markdownlint-disable -->
   [logo]: https://cloudposse.com/logo-300x69.svg
   [docs]: https://cpco.io/docs?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=docs
   [website]: https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-helm-release&utm_content=website
@@ -518,3 +518,4 @@ Check out [our other projects][github], [follow us on twitter][twitter], [apply 
   [share_googleplus]: https://plus.google.com/share?url=https://github.com/cloudposse/terraform-aws-helm-release
   [share_email]: mailto:?subject=terraform-aws-helm-release&body=https://github.com/cloudposse/terraform-aws-helm-release
   [beacon]: https://ga-beacon.cloudposse.com/UA-76589703-4/cloudposse/terraform-aws-helm-release?pixel&cs=github&cm=readme&an=terraform-aws-helm-release
+<!-- markdownlint-restore -->
