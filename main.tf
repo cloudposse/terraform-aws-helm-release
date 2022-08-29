@@ -5,13 +5,13 @@ locals {
 
 module "eks_iam_policy" {
   source  = "cloudposse/iam-policy/aws"
-  version = "0.3.0"
+  version = "0.4.0"
 
   enabled = local.iam_role_enabled
 
-  iam_source_json       = var.iam_source_json
-  iam_source_json_url   = var.iam_source_json_url
-  iam_policy_statements = var.iam_policy_statements
+  iam_source_policy_documents = var.iam_source_policy_documents
+  iam_source_json_url         = var.iam_source_json_url
+  iam_policy_statements       = var.iam_policy_statements
 
   context = module.this.context
 }
