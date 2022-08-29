@@ -24,6 +24,8 @@ module "helm_release" {
   create_namespace     = var.create_namespace
   kubernetes_namespace = var.kubernetes_namespace
 
+  eks_cluster_oidc_issuer_url = module.eks_cluster.eks_cluster_identity_oidc_issuer
+
   atomic          = var.atomic
   cleanup_on_fail = var.cleanup_on_fail
   timeout         = var.timeout
