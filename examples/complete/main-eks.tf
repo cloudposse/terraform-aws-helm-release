@@ -34,22 +34,23 @@ locals {
 
 module "vpc" {
   source  = "cloudposse/vpc/aws"
-  version = "0.21.1"
+  version = "1.1.1"
 
-  cidr_block = "172.16.0.0/16"
-  tags       = local.tags
+  ipv4_primary_cidr_block = "172.16.0.0/16"
+
+  tags = local.tags
 
   context = module.this.context
 }
 
 module "subnets" {
   source  = "cloudposse/dynamic-subnets/aws"
-  version = "0.38.0"
+  version = "2.0.3"
 
   availability_zones              = var.availability_zones
   vpc_id                          = module.vpc.vpc_id
-  igw_id                          = module.vpc.igw_id
-  cidr_block                      = module.vpc.vpc_cidr_block
+  igw_id                          = [module.vpc.igw_id]
+  ipv4_cidr_block                 = [module.vpc.vpc_cidr_block]
   nat_gateway_enabled             = true
   nat_instance_enabled            = false
   tags                            = local.tags
@@ -61,7 +62,7 @@ module "subnets" {
 
 module "eks_cluster" {
   source  = "cloudposse/eks-cluster/aws"
-  version = "0.39.0"
+  version = "2.4.0"
 
   region                       = var.region
   vpc_id                       = module.vpc.vpc_id
@@ -96,7 +97,7 @@ data "null_data_source" "wait_for_cluster_and_kubernetes_configmap" {
 
 module "eks_node_group" {
   source  = "cloudposse/eks-node-group/aws"
-  version = "0.19.0"
+  version = "2.4.0"
 
   subnet_ids        = module.subnets.private_subnet_ids
   cluster_name      = data.null_data_source.wait_for_cluster_and_kubernetes_configmap.outputs["cluster_name"]
@@ -106,6 +107,9 @@ module "eks_node_group" {
   max_size          = var.max_size
   kubernetes_labels = var.kubernetes_labels
   disk_size         = var.disk_size
+
+  # Prevent the node groups from being created before the Kubernetes aws-auth ConfigMap
+  module_depends_on = module.eks_cluster.kubernetes_config_map_id
 
   context = module.this.context
 }
