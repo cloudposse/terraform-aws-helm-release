@@ -8,9 +8,9 @@ variable "iam_role_enabled" {
 
 ## eks_iam_policy
 
-variable "iam_source_json" {
-  type        = string
-  description = "IAM source JSON policy to use as `source_json` argument. This can be used with or instead of the `var.iam_policy_statements`. this cannot be used with `var.iam_source_json_url`."
+variable "iam_source_policy_documents" {
+  type        = list(string)
+  description = "List of IAM policy documents that are merged together into the exported document. Statements defined in `source_policy_documents` or `source_json` must have unique sids. Statements with the same sid from documents assigned to the `override_json` and `override_policy_documents` arguments will override source statements."
   default     = null
 }
 
