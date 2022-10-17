@@ -1,6 +1,13 @@
 locals {
   enabled          = module.this.enabled
   iam_role_enabled = local.enabled && var.iam_role_enabled
+
+  create_namespace         = local.enabled && coalesce(var.create_namespace_with_kubernetes, var.create_namespace, false)
+  create_namespace_via_k8s = local.enabled && (var.create_namespace_with_kubernetes == true) # true && null yields error
+
+  # Maintain backward compatibility with v0.6.0, use helm to create
+  # the namespace if the new (with v0.7.0) variables are not used.
+  create_namespace_via_helm = local.create_namespace && !local.create_namespace_via_k8s
 }
 
 module "eks_iam_policy" {
@@ -33,6 +40,21 @@ module "eks_iam_role" {
   context = module.this.context
 }
 
+resource "kubernetes_namespace" "default" {
+  count = local.create_namespace_via_k8s ? 1 : 0
+
+  metadata {
+    name        = var.kubernetes_namespace
+    annotations = var.kubernetes_namespace_annotations
+    labels      = var.kubernetes_namespace_labels
+  }
+
+  # During destroy, we may need the IAM role preserved in order to run finalizers
+  # which remove resources. This depends_on ensures that the IAM role is not
+  # destroyed until after the namespace is destroyed.
+  depends_on = [module.eks_iam_role]
+}
+
 resource "helm_release" "this" {
   count = local.enabled ? 1 : 0
 
@@ -53,9 +75,9 @@ resource "helm_release" "this" {
   repository_username  = var.repository_username
 
   # Note: creating a namespace here will not allow creation of labels/annotations
-  # For that, a `kubernetes_namespace` resource would have to be created.
+  # For that, use create_namespace_via_kubernetes.
   # See https://github.com/hashicorp/terraform-provider-helm/issues/584#issuecomment-689555268
-  create_namespace = var.create_namespace
+  create_namespace = local.create_namespace_via_helm
   namespace        = var.kubernetes_namespace
 
   atomic                     = var.atomic
@@ -113,4 +135,9 @@ resource "helm_release" "this" {
       binary_path = var.postrender_binary_path
     }
   }
+
+  depends_on = [
+    module.eks_iam_role,
+    kubernetes_namespace.default,
+  ]
 }

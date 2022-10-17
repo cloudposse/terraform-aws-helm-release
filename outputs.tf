@@ -44,5 +44,5 @@ output "service_account_policy_arn" {
 
 output "metadata" {
   description = "Block status of the deployed release."
-  value       = local.enabled ? helm_release.this[0].metadata : null
+  value       = one(helm_release.this[*].metadata)
 }
