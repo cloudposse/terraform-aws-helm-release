@@ -15,7 +15,7 @@ init:
 ## Run tests
 test:
 	@echo Terratest not implemented in this project
-	@echo 1
+	@exit 1
 
 real_test: init
 	go mod download
