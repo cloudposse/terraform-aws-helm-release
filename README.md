@@ -28,7 +28,8 @@
 
 -->
 
-This `terraform-aws-helm-release` module creates a helm chart with an option to create an EKS IAM role.
+This `terraform-aws-helm-release` module deploys a [Helm chart](https://helm.sh/docs/topics/charts/) with
+an option to create an EKS IAM Role for a Service Account ([IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html)).
 
 ---
 
@@ -93,10 +94,67 @@ the registry shows many of our inputs as required when in fact they are optional
 The table below correctly indicates which inputs are required.
 
 
-For a complete example, see [examples/complete](examples/complete).
 
-For automated tests of the complete example using [bats](https://github.com/bats-core/bats-core) and [Terratest](https://github.com/gruntwork-io/terratest)
-(which tests and deploys the example on AWS), see [test](test).
+This  module deploys a [Helm chart](https://helm.sh/docs/topics/charts/) with
+an option to create an EKS IAM Role for a Service Account ([IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html)).
+It has many of the same features and limitations of Helm, and uses the
+Terraform [Helm provider](https://github.com/hashicorp/terraform-provider-helm),
+specifically the [helm_release](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) resource.
+
+NOTE: This module is just a convenient wrapper, packaging up 3 concepts:
+1. Deploying a Helm Chart to an EKS cluster
+1. Creating a Kubernetes namespace in the EKS cluster
+1. Creating an IAM role for a Kubernetes Service Account (which, in turn,
+is presumably created by deploying the Helm Chart)
+
+Many issues may arise that are due to limitations of Helm, Kubernetes, EKS,
+Terraform, or the Terraform providers. Please address issues and complaints
+to the project that can potentially fix them, which will usually not be this module.
+
+### Provider requirements.
+
+This module is unusual in that it requires you to configure 3 separate Terraform providers:
+1. AWS
+2. Helm
+3. Kubernetes
+
+Cloud Posse maintains a [provider-helm.tf](https://github.com/cloudposse/terraform-aws-components/blob/master/mixins/provider-helm.tf)
+file "mixin" for use in Cloud Posse [components](https://github.com/cloudposse/terraform-aws-components)
+which you can also use as an example of how to configure the Helm and Kubernetes providers in your own component.
+
+
+### Creating a namespace
+
+This module provides 2 options for creating the namespace the chart will be deployed to, for the
+case where you are deploying the chart into its own namespace that does not already exist.
+
+1. `create_namespace_with_kubernetes` will manage the namespace using a Terraform `kubernetes_namespace`
+resource. This is the recommended way to create the namespace, because it allows you to
+annotate (`kubernetes_namespace_annotations`) and label (`kubernetes_namespace_labels`) the namespace,
+and it provides proper sequencing of creation and
+destruction of deployments, resources, and IAM roles. When the deployment is
+destroyed with `terraform destroy`, the namespace will be deleted, too. This will
+delete everything else in the namespace (but never the Custom Resource Definitions,
+which themselves are non-namespaced), so if this is not the desired behavior, you
+should create the namespace in a separate Terraform component.
+1. `create_namespace` is the obsolete way to create a namespace, by delegating the
+responsibility to Helm. This is not recommended because it provides no control over
+the annotations or labels of the namespace, and when the deployment is
+destroyed with `terraform destroy`, the namespace will be left behind.
+This can cause problems with future deployments.
+
+Note: You may have trouble deleting a release from within Terraform if the Kubernetes cluster
+has been modified outside of this module, for example if the namespace or the cluster itself has been deleted.
+You can delete the Terraform state if the resources are gone, using `terraform state rm`
+or even `terraform workspace delete`, or you can try using `terraform destroy`.
+In some cases, it may be helpful to set `var.enabled` to `false` while destroying:
+
+```shell
+terraform destroy -var enabled=false
+```
+
+
+For a complete example, see [examples/complete](examples/complete).
 
 ```hcl
 module "helm_release" {
@@ -215,6 +273,7 @@ Available targets:
 | Name | Version |
 |------|---------|
 | <a name="provider_helm"></a> [helm](#provider\_helm) | >= 2.2 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | n/a |
 
 ## Modules
 
@@ -229,6 +288,7 @@ Available targets:
 | Name | Type |
 |------|------|
 | [helm_release.this](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
+| [kubernetes_namespace.default](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
 
 ## Inputs
 
@@ -243,7 +303,8 @@ Available targets:
 | <a name="input_chart_version"></a> [chart\_version](#input\_chart\_version) | Specify the exact chart version to install. If this is not specified, the latest version is installed. | `string` | `null` | no |
 | <a name="input_cleanup_on_fail"></a> [cleanup\_on\_fail](#input\_cleanup\_on\_fail) | Allow deletion of new resources created in this upgrade when upgrade fails. Defaults to `false`. | `bool` | `null` | no |
 | <a name="input_context"></a> [context](#input\_context) | Single object for setting entire context at once.<br>See description of individual variables for details.<br>Leave string and numeric variables as `null` to use default value.<br>Individual variable settings (non-null) override settings in context object,<br>except for attributes, tags, and additional\_tag\_map, which are merged. | `any` | <pre>{<br>  "additional_tag_map": {},<br>  "attributes": [],<br>  "delimiter": null,<br>  "descriptor_formats": {},<br>  "enabled": true,<br>  "environment": null,<br>  "id_length_limit": null,<br>  "label_key_case": null,<br>  "label_order": [],<br>  "label_value_case": null,<br>  "labels_as_tags": [<br>    "unset"<br>  ],<br>  "name": null,<br>  "namespace": null,<br>  "regex_replace_chars": null,<br>  "stage": null,<br>  "tags": {},<br>  "tenant": null<br>}</pre> | no |
-| <a name="input_create_namespace"></a> [create\_namespace](#input\_create\_namespace) | Create the namespace if it does not yet exist. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_create_namespace"></a> [create\_namespace](#input\_create\_namespace) | (Not recommended, use `create_namespace_with_kubernetes` instead)<br>Create the namespace via Helm if it does not yet exist. Defaults to `false`.<br>Does not support annotations or labels. May have problems when destroying.<br>Ignored when `create_namespace_with_kubernetes` is set. | `bool` | `null` | no |
+| <a name="input_create_namespace_with_kubernetes"></a> [create\_namespace\_with\_kubernetes](#input\_create\_namespace\_with\_kubernetes) | Create the namespace via Kubernetes if it does not yet exist. Defaults to `false`.<br>Must set `true` if you want to use namespace annotations or labels. | `bool` | `null` | no |
 | <a name="input_delimiter"></a> [delimiter](#input\_delimiter) | Delimiter to be used between ID elements.<br>Defaults to `-` (hyphen). Set to `""` to use no delimiter at all. | `string` | `null` | no |
 | <a name="input_dependency_update"></a> [dependency\_update](#input\_dependency\_update) | Runs helm dependency update before installing the chart. Defaults to `false`. | `bool` | `null` | no |
 | <a name="input_description"></a> [description](#input\_description) | Release description attribute (visible in the history). | `string` | `null` | no |
@@ -262,6 +323,8 @@ Available targets:
 | <a name="input_id_length_limit"></a> [id\_length\_limit](#input\_id\_length\_limit) | Limit `id` to this many characters (minimum 6).<br>Set to `0` for unlimited length.<br>Set to `null` for keep the existing setting, which defaults to `0`.<br>Does not affect `id_full`. | `number` | `null` | no |
 | <a name="input_keyring"></a> [keyring](#input\_keyring) | Location of public keys used for verification. Used only if `verify` is true. Defaults to `/.gnupg/pubring.gpg` in the location set by `home`. | `string` | `null` | no |
 | <a name="input_kubernetes_namespace"></a> [kubernetes\_namespace](#input\_kubernetes\_namespace) | The namespace to install the release into. Defaults to `default`. | `string` | `null` | no |
+| <a name="input_kubernetes_namespace_annotations"></a> [kubernetes\_namespace\_annotations](#input\_kubernetes\_namespace\_annotations) | Annotations to be added to the created namespace. Ignored unless `create_namespace_with_kubernetes` is `true`. | `map(string)` | `{}` | no |
+| <a name="input_kubernetes_namespace_labels"></a> [kubernetes\_namespace\_labels](#input\_kubernetes\_namespace\_labels) | Labels to be added to the created namespace. Ignored unless `create_namespace_with_kubernetes` is `true`. | `map(string)` | `{}` | no |
 | <a name="input_label_key_case"></a> [label\_key\_case](#input\_label\_key\_case) | Controls the letter case of the `tags` keys (label names) for tags generated by this module.<br>Does not affect keys of tags passed in via the `tags` input.<br>Possible values: `lower`, `title`, `upper`.<br>Default value: `title`. | `string` | `null` | no |
 | <a name="input_label_order"></a> [label\_order](#input\_label\_order) | The order in which the labels (ID elements) appear in the `id`.<br>Defaults to ["namespace", "environment", "stage", "name", "attributes"].<br>You can omit any of the 6 labels ("tenant" is the 6th), but at least one must be present. | `list(string)` | `null` | no |
 | <a name="input_label_value_case"></a> [label\_value\_case](#input\_label\_value\_case) | Controls the letter case of ID elements (labels) as included in `id`,<br>set as tag values, and output by this module individually.<br>Does not affect values of tags passed in via the `tags` input.<br>Possible values: `lower`, `title`, `upper` and `none` (no transformation).<br>Set this to `title` and set `delimiter` to `""` to yield Pascal Case IDs.<br>Default value: `lower`. | `string` | `null` | no |
@@ -330,6 +393,7 @@ Are you using this project or any of our other projects? Consider [leaving a tes
 
 Check out these related projects.
 
+- [terraform-aws-eks-iam-role](https://github.com/cloudposse/terraform-aws-eks-iam-role/) - Terraform module to provision an EKS IAM Role for Service Account.
 - [terraform-null-label](https://github.com/cloudposse/terraform-null-label) - Terraform module designed to generate consistent names and tags for resources. Use terraform-null-label to implement a strict naming convention.
 
 
@@ -337,8 +401,8 @@ Check out these related projects.
 
 For additional context, refer to some of these links.
 
-- [Terraform Standard Module Structure](https://www.terraform.io/docs/modules/index.html#standard-module-structure) - HashiCorp's standard module structure is a file and directory layout we recommend for reusable modules distributed in separate repositories.
-- [Terraform Module Requirements](https://www.terraform.io/docs/registry/modules/publish.html#requirements) - HashiCorp's guidance on all the requirements for publishing a module. Meeting the requirements for publishing a module is extremely easy.
+- [Helm](https://helm.sh/) - Helm: The package manager for Kubernetes.
+- [IAM Roles for Service Accounts](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html) - HashiCorp's guidance on all the requirements for publishing a module. Meeting the requirements for publishing a module is extremely easy.
 - [Terraform Version Pinning](https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version) - The required_version setting can be used to constrain which versions of the Terraform CLI can be used with your configuration
 
 
@@ -414,7 +478,7 @@ In general, PRs are welcome. We follow the typical "fork-and-pull" Git workflow.
 
 ## Copyrights
 
-Copyright © 2021-2022 [Cloud Posse, LLC](https://cloudposse.com)
+Copyright © 2021-2022-2022 [Cloud Posse, LLC](https://cloudposse.com)
 
 
 

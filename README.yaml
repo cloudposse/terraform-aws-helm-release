@@ -17,7 +17,7 @@ license: "APACHE2"
 copyrights:
   - name: "Cloud Posse, LLC"
     url: "https://cloudposse.com"
-    year: "2021"
+    year: "2021-2022"
 
 # Canonical GitHub repo
 github_repo: cloudposse/terraform-aws-helm-release
@@ -36,36 +36,93 @@ badges:
 
 # List any related terraform modules that this module may be used with or that this module depends on.
 related:
+  - name: "terraform-aws-eks-iam-role"
+    description: "Terraform module to provision an EKS IAM Role for Service Account."
+    url: "https://github.com/cloudposse/terraform-aws-eks-iam-role/"
   - name: "terraform-null-label"
     description: "Terraform module designed to generate consistent names and tags for resources. Use terraform-null-label to implement a strict naming convention."
     url: "https://github.com/cloudposse/terraform-null-label"
 
 # List any resources helpful for someone to get started. For example, link to the hashicorp documentation or AWS documentation.
 references:
-  - name: "Terraform Standard Module Structure"
-    description: "HashiCorp's standard module structure is a file and directory layout we recommend for reusable modules distributed in separate repositories."
-    url: "https://www.terraform.io/docs/modules/index.html#standard-module-structure"
-  - name: "Terraform Module Requirements"
+  - name: "Helm"
+    description: "Helm: The package manager for Kubernetes."
+    url: "https://helm.sh/"
+  - name: "IAM Roles for Service Accounts"
     description: "HashiCorp's guidance on all the requirements for publishing a module. Meeting the requirements for publishing a module is extremely easy."
-    url: "https://www.terraform.io/docs/registry/modules/publish.html#requirements"
+    url: "https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html"
   - name: "Terraform Version Pinning"
     description: "The required_version setting can be used to constrain which versions of the Terraform CLI can be used with your configuration"
     url: "https://www.terraform.io/docs/configuration/terraform.html#specifying-a-required-terraform-version"
 
 # Short description of this project
 description: |-
-  This `terraform-aws-helm-release` module creates a helm chart with an option to create an EKS IAM role.
-
-# Introduction to the project
-#introduction: |-
-#  This is an introduction.
+  This `terraform-aws-helm-release` module deploys a [Helm chart](https://helm.sh/docs/topics/charts/) with
+  an option to create an EKS IAM Role for a Service Account ([IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html)).
 
 # How to use this module. Should be an easy example to copy and paste.
 usage: |-
-  For a complete example, see [examples/complete](examples/complete).
 
-  For automated tests of the complete example using [bats](https://github.com/bats-core/bats-core) and [Terratest](https://github.com/gruntwork-io/terratest)
-  (which tests and deploys the example on AWS), see [test](test).
+  This  module deploys a [Helm chart](https://helm.sh/docs/topics/charts/) with
+  an option to create an EKS IAM Role for a Service Account ([IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html)).
+  It has many of the same features and limitations of Helm, and uses the
+  Terraform [Helm provider](https://github.com/hashicorp/terraform-provider-helm),
+  specifically the [helm_release](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) resource.
+
+  NOTE: This module is just a convenient wrapper, packaging up 3 concepts:
+  1. Deploying a Helm Chart to an EKS cluster
+  1. Creating a Kubernetes namespace in the EKS cluster
+  1. Creating an IAM role for a Kubernetes Service Account (which, in turn,
+  is presumably created by deploying the Helm Chart)
+
+  Many issues may arise that are due to limitations of Helm, Kubernetes, EKS,
+  Terraform, or the Terraform providers. Please address issues and complaints
+  to the project that can potentially fix them, which will usually not be this module.
+
+  ### Provider requirements.
+
+  This module is unusual in that it requires you to configure 3 separate Terraform providers:
+  1. AWS
+  2. Helm
+  3. Kubernetes
+
+  Cloud Posse maintains a [provider-helm.tf](https://github.com/cloudposse/terraform-aws-components/blob/master/mixins/provider-helm.tf)
+  file "mixin" for use in Cloud Posse [components](https://github.com/cloudposse/terraform-aws-components)
+  which you can also use as an example of how to configure the Helm and Kubernetes providers in your own component.
+
+
+  ### Creating a namespace
+
+  This module provides 2 options for creating the namespace the chart will be deployed to, for the
+  case where you are deploying the chart into its own namespace that does not already exist.
+
+  1. `create_namespace_with_kubernetes` will manage the namespace using a Terraform `kubernetes_namespace`
+  resource. This is the recommended way to create the namespace, because it allows you to
+  annotate (`kubernetes_namespace_annotations`) and label (`kubernetes_namespace_labels`) the namespace,
+  and it provides proper sequencing of creation and
+  destruction of deployments, resources, and IAM roles. When the deployment is
+  destroyed with `terraform destroy`, the namespace will be deleted, too. This will
+  delete everything else in the namespace (but never the Custom Resource Definitions,
+  which themselves are non-namespaced), so if this is not the desired behavior, you
+  should create the namespace in a separate Terraform component.
+  1. `create_namespace` is the obsolete way to create a namespace, by delegating the
+  responsibility to Helm. This is not recommended because it provides no control over
+  the annotations or labels of the namespace, and when the deployment is
+  destroyed with `terraform destroy`, the namespace will be left behind.
+  This can cause problems with future deployments.
+
+  Note: You may have trouble deleting a release from within Terraform if the Kubernetes cluster
+  has been modified outside of this module, for example if the namespace or the cluster itself has been deleted.
+  You can delete the Terraform state if the resources are gone, using `terraform state rm`
+  or even `terraform workspace delete`, or you can try using `terraform destroy`.
+  In some cases, it may be helpful to set `var.enabled` to `false` while destroying:
+
+  ```shell
+  terraform destroy -var enabled=false
+  ```
+
+
+  For a complete example, see [examples/complete](examples/complete).
 
   ```hcl
   module "helm_release" {

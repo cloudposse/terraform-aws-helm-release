@@ -183,7 +183,21 @@ variable "chart_version" {
 
 variable "create_namespace" {
   type        = bool
-  description = "Create the namespace if it does not yet exist. Defaults to `false`."
+  description = <<-EOT
+    (Not recommended, use `create_namespace_with_kubernetes` instead)
+    Create the namespace via Helm if it does not yet exist. Defaults to `false`.
+    Does not support annotations or labels. May have problems when destroying.
+    Ignored when `create_namespace_with_kubernetes` is set.
+    EOT
+  default     = null
+}
+
+variable "create_namespace_with_kubernetes" {
+  type        = bool
+  description = <<-EOT
+    Create the namespace via Kubernetes if it does not yet exist. Defaults to `false`.
+    Must set `true` if you want to use namespace annotations or labels.
+    EOT
   default     = null
 }
 
@@ -191,6 +205,18 @@ variable "kubernetes_namespace" {
   type        = string
   description = "The namespace to install the release into. Defaults to `default`."
   default     = null
+}
+
+variable "kubernetes_namespace_annotations" {
+  type        = map(string)
+  description = "Annotations to be added to the created namespace. Ignored unless `create_namespace_with_kubernetes` is `true`."
+  default     = {}
+}
+
+variable "kubernetes_namespace_labels" {
+  type        = map(string)
+  description = "Labels to be added to the created namespace. Ignored unless `create_namespace_with_kubernetes` is `true`."
+  default     = {}
 }
 
 variable "atomic" {
