@@ -54,9 +54,8 @@ module "helm_release" {
   ]
 }
 
-#bridgecrew:skip=BC_AWS_IAM_57:Skipping `Ensure IAM policies does not allow write access without constraint`
-# because this is test code running in the test sandbox.
 data "aws_iam_policy_document" "node_termination_handler" {
+  #bridgecrew:skip=BC_AWS_IAM_57:Skipping `Ensure IAM policies does not allow write access without constraint` because this is a test case
   statement {
     sid       = ""
     effect    = "Allow"
