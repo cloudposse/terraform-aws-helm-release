@@ -12,7 +12,30 @@ name = "helm"
 
 availability_zones = ["us-east-2a", "us-east-2b"]
 
-kubernetes_version = "1.19"
+kubernetes_version = "1.26"
+addons = [
+  // https://docs.aws.amazon.com/eks/latest/userguide/managing-vpc-cni.html#vpc-cni-latest-available-version
+  {
+    addon_name               = "vpc-cni"
+    addon_version            = null
+    resolve_conflicts        = "NONE"
+    service_account_role_arn = null
+  },
+  // https://docs.aws.amazon.com/eks/latest/userguide/managing-kube-proxy.html
+  {
+    addon_name               = "kube-proxy"
+    addon_version            = null
+    resolve_conflicts        = "NONE"
+    service_account_role_arn = null
+  },
+  // https://docs.aws.amazon.com/eks/latest/userguide/managing-coredns.html
+  {
+    addon_name               = "coredns"
+    addon_version            = null
+    resolve_conflicts        = "NONE"
+    service_account_role_arn = null
+  },
+]
 
 oidc_provider_enabled = true
 
@@ -36,15 +59,15 @@ cluster_encryption_config_enabled = true
 
 ## helm related
 
-repository = "https://charts.helm.sh/incubator"
+repository = "https://aws.github.io/eks-charts/"
 
-chart = "raw"
+chart = "aws-node-termination-handler"
 
-chart_version = "0.2.5"
+chart_version = "0.21.0"
 
 create_namespace = true
 
-kubernetes_namespace = "echo"
+kubernetes_namespace = "test"
 
 atomic = true
 

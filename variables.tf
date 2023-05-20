@@ -10,19 +10,19 @@ variable "iam_role_enabled" {
 
 variable "iam_source_policy_documents" {
   type        = list(string)
-  description = "List of IAM policy documents that are merged together into the exported document. Statements defined in `source_policy_documents` or `source_json` must have unique sids. Statements with the same sid from documents assigned to the `override_json` and `override_policy_documents` arguments will override source statements."
+  description = "List of JSON IAM policy documents that are merged together into role's policy. Statements defined in `source_policy_documents` or `source_json` must have unique sids."
   default     = null
 }
 
 variable "iam_source_json_url" {
   type        = string
-  description = "IAM source json policy to download. This will be used as the `source_json` meaning the `var.iam_policy_statements` and `var.iam_policy_statements_template_path` can override it."
+  description = "IAM source json policy to download. The downloaded policy will be combined with `iam_source_policy_statements`."
   default     = null
 }
 
 variable "iam_policy_statements" {
   type        = any
-  description = "IAM policy for the service account. Required if `var.iam_role_enabled` is `true`. This will not do variable replacements. Please see `var.iam_policy_statements_template_path`."
+  description = "DEPRECATED, use `iam_source_policy_documents` instead: IAM policy (as `map(string)`)for the service account."
   default     = {}
 }
 
