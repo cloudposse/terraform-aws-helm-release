@@ -1,83 +1,70 @@
 package test
 
 import (
-	"math/rand"
-	"strconv"
-	"testing"
-	"time"
-
+	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	testStructure "github.com/gruntwork-io/terratest/modules/test-structure"
 	"github.com/stretchr/testify/assert"
+	"k8s.io/apimachinery/pkg/util/runtime"
+	"os"
+	"strings"
+	"testing"
 )
+
+func cleanup(t *testing.T, terraformOptions *terraform.Options, tempTestFolder string) {
+	terraform.Destroy(t, terraformOptions)
+	os.RemoveAll(tempTestFolder)
+}
 
 // Test the Terraform module in examples/complete using Terratest.
 func TestExamplesComplete(t *testing.T) {
 	t.Parallel()
-
-	rand.Seed(time.Now().UnixNano())
-	randID := strconv.Itoa(rand.Intn(100000))
+	randID := strings.ToLower(random.UniqueId())
 	attributes := []string{randID}
 
-	exampleInput := "Hello, world!"
+	rootFolder := "../../"
+	terraformFolderRelativeToRoot := "examples/complete"
+	varFiles := []string{"fixtures.us-east-2.tfvars"}
+
+	tempTestFolder := testStructure.CopyTerraformFolderToTemp(t, rootFolder, terraformFolderRelativeToRoot)
 
 	terraformOptions := &terraform.Options{
 		// The path to where our Terraform code is located
-		TerraformDir: "../../examples/complete",
+		TerraformDir: tempTestFolder,
 		Upgrade:      true,
 		// Variables to pass to our Terraform code using -var-file options
-		VarFiles: []string{"fixtures.us-east-2.tfvars"},
+		VarFiles: varFiles,
 		// We always include a random attribute so that parallel tests
 		// and AWS resources do not interfere with each other
 		Vars: map[string]interface{}{
 			"attributes": attributes,
-			"example":    exampleInput,
 		},
 	}
+
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
-	defer terraform.Destroy(t, terraformOptions)
+	defer cleanup(t, terraformOptions, tempTestFolder)
+
+	// If Go runtime crushes, run `terraform destroy` to clean up any resources that were created
+	defer runtime.HandleCrash(func(i interface{}) {
+		cleanup(t, terraformOptions, tempTestFolder)
+	})
 
 	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
 	terraform.InitAndApply(t, terraformOptions)
 
+	// Ideally we would test that the deployment is functional in a way that
+	// confirms that the IAM role for the service account is working, but that is too hard, at least for now.
+	// Mainly we just test that the `apply` worked without errors.
+
 	// Run `terraform output` to get the value of an output variable
-	id := terraform.Output(t, terraformOptions, "id")
-	example := terraform.Output(t, terraformOptions, "example")
-	random := terraform.Output(t, terraformOptions, "random")
+	roleName := terraform.Output(t, terraformOptions, "service_account_role_name")
 
 	// Verify we're getting back the outputs we expect
-	// Ensure we get a random number appended
-	assert.Equal(t, exampleInput+" "+random, example)
-	// Ensure we get the attribute included in the ID
-	assert.Equal(t, "eg-ue2-test-example-"+randID, id)
-
-	// ************************************************************************
-	// This steps below are unusual, not generally part of the testing
-	// but included here as an example of testing this specific module.
-	// This module has a random number that is supposed to change
-	// only when the example changes. So we run it again to ensure
-	// it does not change.
-
-	// This will run `terraform apply` a second time and fail the test if there are any errors
-	terraform.Apply(t, terraformOptions)
-
-	id2 := terraform.Output(t, terraformOptions, "id")
-	example2 := terraform.Output(t, terraformOptions, "example")
-	random2 := terraform.Output(t, terraformOptions, "random")
-
-	assert.Equal(t, id, id2, "Expected `id` to be stable")
-	assert.Equal(t, example, example2, "Expected `example` to be stable")
-	assert.Equal(t, random, random2, "Expected `random` to be stable")
-
-	// Then we run change the example and run it a third time and
-	// verify that the random number changed
-	newExample := "Goodbye"
-	terraformOptions.Vars["example"] = newExample
-	terraform.Apply(t, terraformOptions)
-
-	example3 := terraform.Output(t, terraformOptions, "example")
-	random3 := terraform.Output(t, terraformOptions, "random")
-
-	assert.NotEqual(t, random, random3, "Expected `random` to change when `example` changed")
-	assert.Equal(t, newExample+" "+random3, example3, "Expected `example` to use new random number")
-
+	// Ensure we get the right IRSA role name
+	assert.Equal(t, "eg-ue2-test-helm-"+randID+"-aws-node-termination-handler@test", roleName)
 }
+
+// We do not test `enabled = false` for the `helm_release` resource
+// because the EKS cluster still needs to exist for the providers to be initialized,
+// and for now it is too difficult to isolate the creation of the cluster from the deployment of the Helm release.
+// As of this writing, we are not testing `eks-cluster` with `enabled = false` either.

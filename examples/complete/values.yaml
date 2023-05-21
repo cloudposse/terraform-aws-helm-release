@@ -1,6 +1,6 @@
 image:
   repository: "amazon/aws-node-termination-handler"
-  tag: "v1.13.1"
+  tag: "v1.13.3"
   pullPolicy: IfNotPresent
 
 podMonitor:

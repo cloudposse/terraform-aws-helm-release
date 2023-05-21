@@ -270,3 +270,15 @@ variable "postrender_binary_path" {
   description = "Relative or full path to command binary."
   default     = null
 }
+
+### EKS Addons
+variable "addons" {
+  type = list(object({
+    addon_name               = string
+    addon_version            = string
+    resolve_conflicts        = string
+    service_account_role_arn = string
+  }))
+  description = "Manages [`aws_eks_addon`](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eks_addon) resources"
+  default     = []
+}

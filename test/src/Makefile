@@ -13,11 +13,7 @@ init:
 
 .PHONY : test
 ## Run tests
-test:
-	@echo Terratest not implemented in this project
-	@exit 1
-
-real_test: init
+test: init
 	go mod download
 	go test -v -timeout 60m
 

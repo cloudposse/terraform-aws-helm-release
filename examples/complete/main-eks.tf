@@ -34,7 +34,7 @@ locals {
 
 module "vpc" {
   source  = "cloudposse/vpc/aws"
-  version = "1.1.1"
+  version = "2.1.0"
 
   ipv4_primary_cidr_block = "172.16.0.0/16"
 
@@ -45,7 +45,7 @@ module "vpc" {
 
 module "subnets" {
   source  = "cloudposse/dynamic-subnets/aws"
-  version = "2.0.3"
+  version = "2.3.0"
 
   availability_zones              = var.availability_zones
   vpc_id                          = module.vpc.vpc_id
@@ -58,11 +58,13 @@ module "subnets" {
   private_subnets_additional_tags = local.private_subnets_additional_tags
 
   context = module.this.context
+
+  depends_on = [module.vpc]
 }
 
 module "eks_cluster" {
   source  = "cloudposse/eks-cluster/aws"
-  version = "2.4.0"
+  version = "2.8.0"
 
   region                       = var.region
   vpc_id                       = module.vpc.vpc_id
@@ -81,26 +83,18 @@ module "eks_cluster" {
   cluster_encryption_config_resources                       = var.cluster_encryption_config_resources
 
   context = module.this.context
-}
 
-# Ensure ordering of resource creation to eliminate the race conditions when applying the Kubernetes Auth ConfigMap.
-# Do not create Node Group before the EKS cluster is created and the `aws-auth` Kubernetes ConfigMap is applied.
-# Otherwise, EKS will create the ConfigMap first and add the managed node role ARNs to it,
-# and the kubernetes provider will throw an error that the ConfigMap already exists (because it can't update the map, only create it).
-# If we create the ConfigMap first (to add additional roles/users/accounts), EKS will just update it by adding the managed node role ARNs.
-data "null_data_source" "wait_for_cluster_and_kubernetes_configmap" {
-  inputs = {
-    cluster_name             = module.eks_cluster.eks_cluster_id
-    kubernetes_config_map_id = module.eks_cluster.kubernetes_config_map_id
-  }
+  addons             = var.addons
+  addons_depends_on  = [module.eks_node_group]
+  cluster_depends_on = [module.subnets]
 }
 
 module "eks_node_group" {
   source  = "cloudposse/eks-node-group/aws"
-  version = "2.4.0"
+  version = "2.10.0"
 
   subnet_ids        = module.subnets.private_subnet_ids
-  cluster_name      = data.null_data_source.wait_for_cluster_and_kubernetes_configmap.outputs["cluster_name"]
+  cluster_name      = module.eks_cluster.eks_cluster_id
   instance_types    = var.instance_types
   desired_size      = var.desired_size
   min_size          = var.min_size

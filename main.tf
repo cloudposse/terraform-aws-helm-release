@@ -25,7 +25,7 @@ module "eks_iam_policy" {
 
 module "eks_iam_role" {
   source  = "cloudposse/eks-iam-role/aws"
-  version = "1.1.0"
+  version = "2.0.0"
 
   enabled = local.iam_role_enabled
 
@@ -38,6 +38,8 @@ module "eks_iam_role" {
   permissions_boundary        = var.permissions_boundary
 
   context = module.this.context
+
+  depends_on = [module.eks_iam_policy]
 }
 
 resource "kubernetes_namespace" "default" {
