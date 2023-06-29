@@ -1,6 +1,7 @@
 locals {
-  enabled          = module.this.enabled
-  iam_role_enabled = local.enabled && var.iam_role_enabled
+  enabled            = module.this.enabled
+  iam_role_enabled   = local.enabled && var.iam_role_enabled
+  iam_policy_enabled = local.iam_role_enabled && var.iam_policy_enabled
 
   create_namespace         = local.enabled && coalesce(var.create_namespace_with_kubernetes, var.create_namespace, false)
   create_namespace_via_k8s = local.enabled && (var.create_namespace_with_kubernetes == true) # true && null yields error
@@ -14,7 +15,7 @@ module "eks_iam_policy" {
   source  = "cloudposse/iam-policy/aws"
   version = "1.0.1"
 
-  enabled = local.iam_role_enabled
+  enabled = local.iam_policy_enabled
 
   iam_source_policy_documents = var.iam_source_policy_documents
   iam_source_json_url         = var.iam_source_json_url
@@ -30,7 +31,7 @@ module "eks_iam_role" {
   enabled = local.iam_role_enabled
 
   aws_account_number          = var.aws_account_number
-  aws_iam_policy_document     = local.iam_role_enabled ? [module.eks_iam_policy.json] : ["{}"]
+  aws_iam_policy_document     = local.iam_policy_enabled ? [module.eks_iam_policy.json] : []
   aws_partition               = var.aws_partition
   eks_cluster_oidc_issuer_url = var.eks_cluster_oidc_issuer_url
   service_account_name        = var.service_account_name
