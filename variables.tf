@@ -8,6 +8,12 @@ variable "iam_role_enabled" {
 
 ## eks_iam_policy
 
+variable "iam_policy_enabled" {
+  type        = bool
+  description = "Whether to create and attach an IAM policy to the created IAM role"
+  default     = true
+}
+
 variable "iam_source_policy_documents" {
   type        = list(string)
   description = "List of JSON IAM policy documents that are merged together into role's policy. Statements defined in `source_policy_documents` or `source_json` must have unique sids."

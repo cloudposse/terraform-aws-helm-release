@@ -89,10 +89,6 @@ We highly recommend that in your code you pin the version to the exact version y
 using so that your infrastructure remains stable, and update versions in a
 systematic way so that they do not catch you by surprise.
 
-Also, because of a bug in the Terraform registry ([hashicorp/terraform#21417](https://github.com/hashicorp/terraform/issues/21417)),
-the registry shows many of our inputs as required when in fact they are optional.
-The table below correctly indicates which inputs are required.
-
 
 
 This  module deploys a [Helm chart](https://helm.sh/docs/topics/charts/) with
@@ -317,6 +313,7 @@ Available targets:
 | <a name="input_enabled"></a> [enabled](#input\_enabled) | Set to false to prevent the module from creating any resources | `bool` | `null` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT' | `string` | `null` | no |
 | <a name="input_force_update"></a> [force\_update](#input\_force\_update) | Force resource update through delete/recreate if needed. Defaults to `false`. | `bool` | `null` | no |
+| <a name="input_iam_policy_enabled"></a> [iam\_policy\_enabled](#input\_iam\_policy\_enabled) | Whether to create and attach an IAM policy to the created IAM role | `bool` | `true` | no |
 | <a name="input_iam_policy_statements"></a> [iam\_policy\_statements](#input\_iam\_policy\_statements) | DEPRECATED, use `iam_source_policy_documents` instead: IAM policy (as `map(string)`)for the service account. | `any` | `{}` | no |
 | <a name="input_iam_role_enabled"></a> [iam\_role\_enabled](#input\_iam\_role\_enabled) | Whether to create an IAM role. Setting this to `true` will also replace any occurrences of `{service_account_role_arn}` in `var.values_template_path` with the ARN of the IAM role created by this module. | `bool` | `false` | no |
 | <a name="input_iam_source_json_url"></a> [iam\_source\_json\_url](#input\_iam\_source\_json\_url) | IAM source json policy to download. The downloaded policy will be combined with `iam_source_policy_statements`. | `string` | `null` | no |
