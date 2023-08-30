@@ -13,13 +13,17 @@ locals {
 
 module "eks_iam_policy" {
   source  = "cloudposse/iam-policy/aws"
-  version = "1.0.1"
+  version = "2.0.0"
 
   enabled = local.iam_policy_enabled
 
-  iam_source_policy_documents = var.iam_source_policy_documents
-  iam_source_json_url         = var.iam_source_json_url
-  iam_policy_statements       = var.iam_policy_statements
+  iam_policy                    = var.iam_policy
+  iam_source_policy_documents   = var.iam_source_policy_documents
+  iam_override_policy_documents = var.iam_override_policy_documents
+  iam_source_json_url           = var.iam_source_json_url
+
+  # iam_policy_statements is deprecated, can be list or map
+  iam_policy_statements = var.iam_policy_statements
 
   context = module.this.context
 }

@@ -36,6 +36,9 @@ badges:
 
 # List any related terraform modules that this module may be used with or that this module depends on.
 related:
+  - name: "terraform-aws-iam-policy"
+    description: "Terraform module to create an IAM Policy document from Terraform inputs."
+    url: "https://github.com/cloudposse/terraform-aws-iam-policy/"
   - name: "terraform-aws-eks-iam-role"
     description: "Terraform module to provision an EKS IAM Role for Service Account."
     url: "https://github.com/cloudposse/terraform-aws-eks-iam-role/"
@@ -161,25 +164,30 @@ usage: |-
     service_account_namespace = "echo"
 
     # IAM policy statements to add to the IAM role
-    iam_policy_statements = {
-      ListMyBucket = {
+    iam_policy = [{
+      statements = [{
+        sid        = "ListMyBucket"
         effect     = "Allow"
         actions    = ["s3:ListBucket"]
         resources  = ["arn:aws:s3:::test"]
         conditions = []
       },
-      WriteMyBucket = {
+      {
+        sid        = "WriteMyBucket"
         effect     = "Allow"
         actions    = ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"]
         resources  = ["arn:aws:s3:::test/*"]
         conditions = []
-      },
-    }
+      }]
+    }]
   }
   ```
 
-  If `var.service_account_name` is set, then `var.name` can be set to "" in order to achieve a shorter name for the IAM
-  Role created for the ServiceAccount:
+  Typically, the prefix for the full name of the created IAM role for the service account ends with the `name` value,
+  supplied either via the `name` or the `context` input. If `service_account_name` is set to something other than `*`,
+  the service account name is then appended to this prefix. In the case where `name` and `service_account_name`
+  are the same, this leads to a repetition, for a name like `eg-echo-echo`. For this reason, we recommend setting
+  `name` to "" when it would otherwise be the same as `service_account_name`:
 
   ```hcl
   module "helm_release" {

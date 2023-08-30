@@ -16,20 +16,78 @@ variable "iam_policy_enabled" {
 
 variable "iam_source_policy_documents" {
   type        = list(string)
-  description = "List of JSON IAM policy documents that are merged together into role's policy. Statements defined in `source_policy_documents` or `source_json` must have unique sids."
+  description = <<-EOT
+    List of IAM policy documents (as JSON strings) that are merged together into the exported document.
+    Statements defined in `iam_source_policy_documents` must have unique SIDs and be distinct from SIDs
+    in `iam_policy` and deprecated `iam_policy_statements`.
+    Statements in these documents will be overridden by statements with the same SID in `iam_override_policy_documents`.
+    EOT
+  default     = null
+}
+
+variable "iam_override_policy_documents" {
+  type        = list(string)
+  description = <<-EOT
+    List of IAM policy documents (as JSON strings) that are merged together into the exported document with higher precedence.
+    In merging, statements with non-blank SIDs will override statements with the same SID
+    from earlier documents in the list and from other "source" documents.
+    EOT
   default     = null
 }
 
 variable "iam_source_json_url" {
   type        = string
-  description = "IAM source json policy to download. The downloaded policy will be combined with `iam_source_policy_statements`."
+  description = <<-EOT
+    URL of the IAM policy (in JSON format) to download and use as `source_json` argument.
+    This is useful when using a 3rd party service that provides their own policy.
+    Statements in this policy will be overridden by statements with the same SID in `iam_override_policy_documents`.
+    EOT
   default     = null
 }
 
 variable "iam_policy_statements" {
   type        = any
-  description = "DEPRECATED, use `iam_source_policy_documents` instead: IAM policy (as `map(string)`)for the service account."
+  description = <<-EOT
+    Deprecated: Use `iam_policy` instead.
+    List or Map of IAM policy statements to use in the policy.
+    This can be used with `iam_source_policy_documents` and `iam_override_policy_documents`
+    and with or instead of `iam_source_json_url`.
+    EOT
   default     = {}
+}
+
+variable "iam_policy" {
+  type = list(object({
+    policy_id = optional(string, null)
+    version   = optional(string, null)
+    statements = list(object({
+      sid           = optional(string, null)
+      effect        = optional(string, null)
+      actions       = optional(list(string), null)
+      not_actions   = optional(list(string), null)
+      resources     = optional(list(string), null)
+      not_resources = optional(list(string), null)
+      conditions = optional(list(object({
+        test     = string
+        variable = string
+        values   = list(string)
+      })), [])
+      principals = optional(list(object({
+        type        = string
+        identifiers = list(string)
+      })), [])
+      not_principals = optional(list(object({
+        type        = string
+        identifiers = list(string)
+      })), [])
+    }))
+  }))
+  description = <<-EOT
+    IAM policy as list of Terraform objects, compatible with Terraform `aws_iam_policy_document` data source
+    except that `source_policy_documents` and `override_policy_documents` are not included.
+    Use inputs `iam_source_policy_documents` and `iam_override_policy_documents` for that.
+    EOT
+  default     = null
 }
 
 ## eks_iam_role
