@@ -13,7 +13,7 @@ locals {
 
 module "eks_iam_policy" {
   source  = "cloudposse/iam-policy/aws"
-  version = "2.0.1"
+  version = "2.0.2"
 
   enabled = local.iam_policy_enabled
 
