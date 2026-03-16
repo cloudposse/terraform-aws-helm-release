@@ -12,7 +12,7 @@ name = "helm"
 
 availability_zones = ["us-east-2a", "us-east-2b"]
 
-kubernetes_version = "1.26"
+kubernetes_version = "1.30"
 addons = [
   // https://docs.aws.amazon.com/eks/latest/userguide/managing-vpc-cni.html#vpc-cni-latest-available-version
   {
