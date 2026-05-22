@@ -9,6 +9,21 @@ locals {
   # Maintain backward compatibility with v0.6.0, use helm to create
   # the namespace if the new (with v0.7.0) variables are not used.
   create_namespace_via_helm = local.create_namespace && !local.create_namespace_via_k8s
+
+  set = concat(
+    var.set,
+    local.iam_role_enabled && var.service_account_role_arn_annotation_enabled ? [
+      {
+        name  = var.service_account_set_key_path
+        value = module.eks_iam_role.service_account_role_arn
+        type  = "string"
+      }
+    ] : []
+  )
+
+  postrender = var.postrender_binary_path != null ? {
+    binary_path = var.postrender_binary_path
+  } : null
 }
 
 module "eks_iam_policy" {
@@ -107,45 +122,12 @@ resource "helm_release" "this" {
   verify                     = var.verify
   wait                       = var.wait
   wait_for_jobs              = var.wait_for_jobs
-
-  dynamic "set" {
-    for_each = var.set
-    content {
-      name  = set.value["name"]
-      value = set.value["value"]
-      type  = set.value["type"]
-    }
-  }
-
-  dynamic "set_sensitive" {
-    for_each = var.set_sensitive
-    content {
-      name  = set_sensitive.value["name"]
-      value = set_sensitive.value["value"]
-      type  = set_sensitive.value["type"]
-    }
-  }
-
-  dynamic "set" {
-    for_each = local.iam_role_enabled && var.service_account_role_arn_annotation_enabled ? [module.eks_iam_role.service_account_role_arn] : []
-    content {
-      name  = var.service_account_set_key_path
-      value = set.value
-      type  = "string"
-    }
-  }
-
-  dynamic "postrender" {
-    for_each = var.postrender_binary_path != null ? [1] : []
-
-    content {
-      binary_path = var.postrender_binary_path
-    }
-  }
+  set                        = local.set
+  set_sensitive              = var.set_sensitive
+  postrender                 = local.postrender
 
   depends_on = [
     module.eks_iam_role,
     kubernetes_namespace.default,
   ]
 }
-
