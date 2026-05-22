@@ -5,7 +5,7 @@ terraform {
     # Update these to reflect the actual requirements of your module
     helm = {
       source  = "hashicorp/helm"
-      version = ">= 2.2"
+      version = ">= 3"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
