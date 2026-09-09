@@ -231,6 +231,7 @@ variable "repository_password" {
   type        = string
   description = "Password for HTTP basic authentication against the repository."
   default     = null
+  sensitive   = true
 }
 
 variable "repository_username" {
